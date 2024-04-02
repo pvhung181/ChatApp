@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "371909187802",
+    "project_id": "hchat-61ec2",
+    "storage_bucket": "hchat-61ec2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:371909187802:android:5c8cb50ea0d2bd4bd96de3",
+        "android_client_info": {
+          "package_name": "vn.pvhung.appchat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "371909187802-2ifqskpv5fk196tsvgubbhndsljmbr0b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "vn.pvhung.appchat",
+            "certificate_hash": "5289b471ebbf6ced36da2449b7af38b9037860d5"
+          }
+        },
+        {
+          "client_id": "371909187802-frt3s1arm314u8ensgjl4cnf8k0r3to3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA6it8_JLaldfOsiKirReIQbmsTHxV2u1o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "371909187802-frt3s1arm314u8ensgjl4cnf8k0r3to3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
