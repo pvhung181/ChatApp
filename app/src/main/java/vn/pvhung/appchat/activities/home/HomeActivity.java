@@ -11,21 +11,22 @@ import com.google.firebase.auth.FirebaseUser;
 import vn.pvhung.appchat.MainActivity;
 import vn.pvhung.appchat.R;
 import vn.pvhung.appchat.databinding.ActivityHomeBinding;
+import vn.pvhung.appchat.databinding.ActivitySettingBinding;
 
 public class HomeActivity extends AppCompatActivity {
 
-    ActivityHomeBinding binding;
+    ActivitySettingBinding binding;
     FirebaseUser currentUser;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityHomeBinding.inflate(getLayoutInflater());
+        binding = ActivitySettingBinding.inflate(getLayoutInflater());
 
         setContentView(binding.getRoot());
 
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        binding.signOutBtn.setOnClickListener(v -> {
+        binding.signoutBtn.setOnClickListener(v -> {
             FirebaseAuth.getInstance().signOut();
             startActivity(new Intent(this, MainActivity.class));
         });

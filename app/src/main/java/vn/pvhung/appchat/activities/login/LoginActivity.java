@@ -20,9 +20,10 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
 
+import vn.pvhung.appchat.MainActivity;
 import vn.pvhung.appchat.R;
 import vn.pvhung.appchat.activities.home.HomeActivity;
-import vn.pvhung.appchat.constants.RequestCode;
+import vn.pvhung.appchat.activities.register.RegisterActivity;
 import vn.pvhung.appchat.constants.StringConstants;
 import vn.pvhung.appchat.databinding.ActivityLoginBinding;
 
@@ -30,11 +31,8 @@ public class LoginActivity extends AppCompatActivity {
 
     ActivityLoginBinding binding;
     FirebaseAuth mAuth;
-
     GoogleSignInOptions gso;
-
     GoogleSignInClient gClient;
-
     ActivityResultLauncher<Intent> launcher;
 
     @Override
@@ -86,8 +84,17 @@ public class LoginActivity extends AppCompatActivity {
         );
 
         binding.googleButton.setOnClickListener(v -> {
+            binding.loadingPanel.setVisibility(View.VISIBLE);
             Intent it = gClient.getSignInIntent();
             launcher.launch(it);
+        });
+
+        binding.backToWelcomeBtn.setOnClickListener(v -> {
+            startActivity(new Intent(this, MainActivity.class));
+        });
+
+        binding.signupLabel.setOnClickListener(v -> {
+            startActivity(new Intent(this, RegisterActivity.class));
         });
     }
 

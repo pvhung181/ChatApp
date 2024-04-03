@@ -1,8 +1,5 @@
 package vn.pvhung.appchat.activities.register;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -10,18 +7,14 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.view.View;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.regex.Pattern;
 
-import vn.pvhung.appchat.MainActivity;
-import vn.pvhung.appchat.R;
 import vn.pvhung.appchat.activities.home.HomeActivity;
 import vn.pvhung.appchat.activities.login.LoginActivity;
 import vn.pvhung.appchat.constants.StringConstants;

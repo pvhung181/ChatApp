@@ -23,13 +23,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        auth = FirebaseAuth.getInstance();
-        if (auth.getCurrentUser() != null) {
-            Intent intent = new Intent(this, HomeActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-            MainActivity.this.finish();
-        }
 
         binding.loginButton.setOnClickListener(
                 v -> startActivity(new Intent(this, LoginActivity.class))
@@ -40,6 +33,18 @@ public class MainActivity extends AppCompatActivity {
                 v -> startActivity(new Intent(this, RegisterActivity.class))
 
         );
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        auth = FirebaseAuth.getInstance();
+        if (auth.getCurrentUser() != null) {
+            Intent intent = new Intent(this, HomeActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            MainActivity.this.finish();
+        }
     }
 
     @Override

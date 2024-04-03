@@ -16,6 +16,12 @@
         android:theme="@style/Theme.AppChat"
         tools:targetApi="31">
         <activity
+            android:name=".activities.register.RegisterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.friends.FriendsActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.setting.SettingActivity"
             android:exported="false" />
         <activity
@@ -23,9 +29,6 @@
             android:exported="false" />
         <activity
             android:name=".activities.home.HomeActivity"
-            android:exported="false" />
-        <activity
-            android:name=".activities.register.RegisterActivity"
             android:exported="false" />
         <activity
             android:name=".HomeActivity"
