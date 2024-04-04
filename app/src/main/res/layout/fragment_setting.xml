@@ -6,6 +6,11 @@
     android:orientation="vertical"
     tools:context=".fragments.setting.SettingFragment">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="This is setting fragment"/>
+
     <Button
         android:id="@+id/signout_btn"
         android:layout_width="match_parent"

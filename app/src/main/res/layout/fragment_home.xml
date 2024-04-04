@@ -6,6 +6,11 @@
     android:orientation="vertical"
     tools:context=".fragments.home.HomeFragment">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="This is home fragment"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_friends_messages"
         android:layout_width="match_parent"
