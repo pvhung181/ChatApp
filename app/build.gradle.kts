@@ -64,7 +64,8 @@ dependencies {
     implementation("com.cometchat:chat-sdk-android:4.0.5")
     implementation("com.cometchat:chat-uikit-android:4.2.2")
 
-
+    //jbcrypt
+    implementation("org.mindrot:jbcrypt:0.4")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

@@ -29,6 +29,7 @@ import vn.pvhung.appchat.activities.register.RegisterActivity;
 import vn.pvhung.appchat.constants.SharedPreferenceName;
 import vn.pvhung.appchat.constants.StringConstants;
 import vn.pvhung.appchat.databinding.ActivityLoginBinding;
+import vn.pvhung.appchat.util.Bcrypt;
 import vn.pvhung.appchat.util.PreferenceManager;
 
 public class LoginActivity extends AppCompatActivity {
@@ -79,24 +80,27 @@ public class LoginActivity extends AppCompatActivity {
 
     private void setListeners() {
         binding.signinButton.setOnClickListener(v -> {
-            if(isValidInfor()) {
+            if (isValidInfor()) {
                 binding.loadingPanel.setVisibility(View.VISIBLE);
                 firestore.collection(StringConstants.KEY_COLLECTIONS_USER)
-                        .whereEqualTo(StringConstants.KEY_USER_NAME ,binding.usernameInput.getText().toString())
-                        .whereEqualTo(StringConstants.KEY_PASSWORD, binding.passwordInput.getText().toString())
+                        .whereEqualTo(StringConstants.KEY_USER_NAME, binding.usernameInput.getText().toString())
                         .get()
                         .addOnSuccessListener(s -> {
-                            if(s.getDocuments().size() > 0) {
+                            if (s.getDocuments().size() > 0) {
                                 DocumentSnapshot doc = s.getDocuments().get(0);
-                                //TODO
-                                appPreferences.putBoolean(StringConstants.IS_SIGNED_IN, true);
-                                Intent it = new Intent(this, HomeActivity.class);
-                                it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivity(it);
-                                finish();
-                            }
-                            else {
-                                makeToast("Username/password is incorrect !!");
+                                if (!Bcrypt.checkPassword(binding.passwordInput.getText().toString(), doc.getString(StringConstants.KEY_PASSWORD))) {
+                                    makeToast("Password is incorrect !!");
+                                    binding.passwordInput.requestFocus();
+                                } else {
+                                    appPreferences.putBoolean(StringConstants.IS_SIGNED_IN, true);
+                                    Intent it = new Intent(this, HomeActivity.class);
+                                    it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    startActivity(it);
+                                    finish();
+                                }
+                            } else {
+                                makeToast("Username is incorrect !!");
+                                binding.usernameInput.requestFocus();
                             }
 
                         })

@@ -18,6 +18,7 @@ import vn.pvhung.appchat.activities.login.LoginActivity;
 import vn.pvhung.appchat.constants.SharedPreferenceName;
 import vn.pvhung.appchat.constants.StringConstants;
 import vn.pvhung.appchat.databinding.ActivityRegisterBinding;
+import vn.pvhung.appchat.util.Bcrypt;
 import vn.pvhung.appchat.util.PreferenceManager;
 
 public class RegisterActivity extends AppCompatActivity {
@@ -65,7 +66,7 @@ public class RegisterActivity extends AppCompatActivity {
                         else {
                             Map<String, Object> data = new HashMap<>();
                             data.put(StringConstants.KEY_USER_NAME, email);
-                            data.put(StringConstants.KEY_PASSWORD, password);
+                            data.put(StringConstants.KEY_PASSWORD, Bcrypt.hashPassword(password));
 
                             signedPreference.putBoolean(email, true);
 
