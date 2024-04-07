@@ -33,7 +33,22 @@ public class LoginActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
     GoogleSignInOptions gso;
     GoogleSignInClient gClient;
-    ActivityResultLauncher<Intent> launcher;
+    ActivityResultLauncher<Intent> launcher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK) {
+                    Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(result.getData());
+                    try {
+                        GoogleSignInAccount account = task.getResult(ApiException.class);
+                        signInWithGoogle(account.getIdToken());
+
+                    } catch (ApiException e) {
+                        Log.e(StringConstants.GOOGLE_SIGNIN_TAG, "Failed to sign in with google");
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+    );
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +64,13 @@ public class LoginActivity extends AppCompatActivity {
 
         gClient = GoogleSignIn.getClient(this, gso);
 
+        setListeners();
+    }
+
+    private void setListeners() {
         binding.signinButton.setOnClickListener(v -> {
+            if(!binding.usernameInput.isActivated() || !binding.passwordInput.isActivated()) return;
+            if(binding.usernameInput.getText() == null || binding.passwordInput.getText() == null) return;
             String email = binding.usernameInput.getText().toString();
             String pass = binding.passwordInput.getText().toString();
             binding.loadingPanel.setVisibility(View.VISIBLE);
@@ -66,22 +87,6 @@ public class LoginActivity extends AppCompatActivity {
                     );
         });
 
-        launcher = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(),
-                result -> {
-                    if (result.getResultCode() == RESULT_OK) {
-                        Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(result.getData());
-                        try {
-                            GoogleSignInAccount account = task.getResult(ApiException.class);
-                            signInWithGoogle(account.getIdToken());
-
-                        } catch (ApiException e) {
-                            Log.e(StringConstants.GOOGLE_SIGNIN_TAG, "Failed to sign in with google");
-                            throw new RuntimeException(e);
-                        }
-                    }
-                }
-        );
 
         binding.googleButton.setOnClickListener(v -> {
             binding.loadingPanel.setVisibility(View.VISIBLE);
@@ -102,6 +107,7 @@ public class LoginActivity extends AppCompatActivity {
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
         mAuth.signInWithCredential(credential)
                 .addOnSuccessListener(suc -> {
+                    Log.e(StringConstants.GOOGLE_SIGNIN_TAG, suc.getUser().getEmail());
                     startActivity(new Intent(this, HomeActivity.class));
                 })
                 .addOnFailureListener(fail -> {

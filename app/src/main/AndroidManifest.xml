@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
+        android:name=".HChatApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -16,22 +17,25 @@
         android:theme="@style/Theme.AppChat"
         tools:targetApi="31">
         <activity
+            android:name=".activities.user.UserInforCollectionActivity"
+            android:exported="false" />
+
+        <service
+            android:name=".firebase.MessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <activity
             android:name=".activities.register.RegisterActivity"
-            android:exported="false" />
-        <activity
-            android:name=".activities.friends.FriendsActivity"
-            android:exported="false" />
-        <activity
-            android:name=".activities.setting.SettingActivity"
             android:exported="false" />
         <activity
             android:name=".activities.login.LoginActivity"
             android:exported="false" />
         <activity
             android:name=".activities.home.HomeActivity"
-            android:exported="false" />
-        <activity
-            android:name=".HomeActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

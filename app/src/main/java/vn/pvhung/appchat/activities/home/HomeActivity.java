@@ -1,20 +1,20 @@
 package vn.pvhung.appchat.activities.home;
 
+import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.view.View;
+import android.widget.TextView;
 
+import androidx.annotation.ColorRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.List;
 
+import vn.pvhung.appchat.MainActivity;
 import vn.pvhung.appchat.R;
 import vn.pvhung.appchat.databinding.ActivityHomeBinding;
 import vn.pvhung.appchat.fragments.friends.FriendFragment;
@@ -32,25 +32,59 @@ public class HomeActivity extends AppCompatActivity {
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        currentUser = FirebaseAuth.getInstance().getCurrentUser();
-
         setupNavigationBottomAppBar();
-
-
     }
 
     private void setupNavigationBottomAppBar() {
 
-        binding.chat.setOnClickListener(v -> setFragment(new HomeFragment()));
+        setColorForTextViewWithDrawableTop(binding.chat, R.color.md_theme_light_primary);
 
-        binding.people.setOnClickListener(v -> setFragment(new FriendFragment()));
+        binding.chat.setOnClickListener(v -> {
+            if (!(getVisibleFragment() instanceof HomeFragment))
+                setFragment(new HomeFragment());
 
-        binding.setting.setOnClickListener(v -> setFragment(new SettingFragment()));
+            setColorForTextViewWithDrawableTop(binding.chat, R.color.md_theme_light_primary);
+            setColorForTextViewWithDrawableTop(binding.people, R.color.black);
+            setColorForTextViewWithDrawableTop(binding.setting, R.color.black);
+        });
+
+        binding.people.setOnClickListener(v -> {
+            if (!(getVisibleFragment() instanceof FriendFragment))
+                setFragment(new FriendFragment());
+
+            setColorForTextViewWithDrawableTop(binding.people, R.color.md_theme_light_primary);
+            setColorForTextViewWithDrawableTop(binding.chat, R.color.black);
+            setColorForTextViewWithDrawableTop(binding.setting, R.color.black);
+        });
+
+        binding.setting.setOnClickListener(v -> {
+            if (!(getVisibleFragment() instanceof SettingFragment))
+                setFragment(new SettingFragment());
+
+            setColorForTextViewWithDrawableTop(binding.setting, R.color.md_theme_light_primary);
+            setColorForTextViewWithDrawableTop(binding.people, R.color.black);
+            setColorForTextViewWithDrawableTop(binding.chat, R.color.black);
+        });
     }
 
     private void setFragment(Fragment fr) {
         FragmentManager fm = getSupportFragmentManager();
         fm.beginTransaction().replace(R.id.section_fragment, fr).commit();
+    }
+
+    private void setColorForTextViewWithDrawableTop(TextView tv, @ColorRes int color) {
+        tv.setTextColor(getColor(color));
+        tv.getCompoundDrawables()[1].setColorFilter(getColor(color), PorterDuff.Mode.SRC_ATOP);
+    }
+
+    private Fragment getVisibleFragment() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        List<Fragment> fragments = fragmentManager.getFragments();
+        for (Fragment fragment : fragments) {
+            if (fragment != null && fragment.isVisible())
+                return fragment;
+        }
+        return null;
     }
 
     @Override

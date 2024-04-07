@@ -24,7 +24,7 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/username_input"
-
+            android:singleLine="true"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="@string/username">
@@ -43,7 +43,7 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/password_input"
-
+            android:singleLine="true"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="@string/password"
@@ -60,6 +60,7 @@
             android:id="@+id/repassword_input"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:singleLine="true"
             android:hint="@string/repassword"
             android:inputType="textPassword" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -80,4 +81,19 @@
         android:text="@string/already_have_acc"
         android:textStyle="italic"
         app:layout_constraintBottom_toBottomOf="parent" />
+
+    <RelativeLayout
+        android:id="@+id/loadingPanel"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:visibility="invisible"
+        >
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true" />
+    </RelativeLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -12,6 +12,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import vn.pvhung.appchat.activities.home.HomeActivity;
 import vn.pvhung.appchat.activities.login.LoginActivity;
 import vn.pvhung.appchat.activities.register.RegisterActivity;
+import vn.pvhung.appchat.data.SampleData;
 import vn.pvhung.appchat.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
@@ -31,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
 
         binding.signupButton.setOnClickListener(
                 v -> startActivity(new Intent(this, RegisterActivity.class))
-
         );
     }
 
