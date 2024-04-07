@@ -19,13 +19,17 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import vn.pvhung.appchat.MainActivity;
 import vn.pvhung.appchat.R;
 import vn.pvhung.appchat.activities.home.HomeActivity;
 import vn.pvhung.appchat.activities.register.RegisterActivity;
+import vn.pvhung.appchat.constants.SharedPreferenceName;
 import vn.pvhung.appchat.constants.StringConstants;
 import vn.pvhung.appchat.databinding.ActivityLoginBinding;
+import vn.pvhung.appchat.util.PreferenceManager;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -33,6 +37,8 @@ public class LoginActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
     GoogleSignInOptions gso;
     GoogleSignInClient gClient;
+    FirebaseFirestore firestore;
+    PreferenceManager appPreferences;
     ActivityResultLauncher<Intent> launcher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
@@ -55,6 +61,10 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        firestore = FirebaseFirestore.getInstance();
+        appPreferences = new PreferenceManager(SharedPreferenceName.KEY_PREFERENCE_NAME, getApplicationContext());
+
         mAuth = FirebaseAuth.getInstance();
 
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -69,22 +79,34 @@ public class LoginActivity extends AppCompatActivity {
 
     private void setListeners() {
         binding.signinButton.setOnClickListener(v -> {
-            if(!binding.usernameInput.isActivated() || !binding.passwordInput.isActivated()) return;
-            if(binding.usernameInput.getText() == null || binding.passwordInput.getText() == null) return;
-            String email = binding.usernameInput.getText().toString();
-            String pass = binding.passwordInput.getText().toString();
-            binding.loadingPanel.setVisibility(View.VISIBLE);
-            mAuth.signInWithEmailAndPassword(email, pass)
-                    .addOnSuccessListener(task -> {
-                        startActivity(new Intent(this, HomeActivity.class));
-                    })
-                    .addOnFailureListener(e -> {
-                        Toast.makeText(this, "Username/Password is wrong !!", Toast.LENGTH_SHORT).show();
-                    })
-                    .addOnCompleteListener(l -> {
-                                binding.loadingPanel.setVisibility(View.GONE);
+            if(isValidInfor()) {
+                binding.loadingPanel.setVisibility(View.VISIBLE);
+                firestore.collection(StringConstants.KEY_COLLECTIONS_USER)
+                        .whereEqualTo(StringConstants.KEY_USER_NAME ,binding.usernameInput.getText().toString())
+                        .whereEqualTo(StringConstants.KEY_PASSWORD, binding.passwordInput.getText().toString())
+                        .get()
+                        .addOnSuccessListener(s -> {
+                            if(s.getDocuments().size() > 0) {
+                                DocumentSnapshot doc = s.getDocuments().get(0);
+                                //TODO
+                                appPreferences.putBoolean(StringConstants.IS_SIGNED_IN, true);
+                                Intent it = new Intent(this, HomeActivity.class);
+                                it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(it);
+                                finish();
                             }
-                    );
+                            else {
+                                makeToast("Username/password is incorrect !!");
+                            }
+
+                        })
+                        .addOnFailureListener(e -> {
+                            Log.e(StringConstants.LOGIN_ACTIVITY_TAG, e.getMessage());
+                        })
+                        .addOnCompleteListener(f -> {
+                            binding.loadingPanel.setVisibility(View.GONE);
+                        });
+            }
         });
 
 
@@ -102,6 +124,25 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(new Intent(this, RegisterActivity.class));
         });
     }
+
+    private void makeToast(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+
+    private boolean isValidInfor() {
+        if (binding.usernameInput.getText().toString().trim().isEmpty()) {
+            makeToast("User name must be filled");
+            binding.usernameInput.requestFocus();
+            return false;
+        } else if (binding.passwordInput.getText().toString().trim().isEmpty()) {
+            makeToast("Password must be filled");
+            binding.passwordInput.requestFocus();
+            return false;
+        }
+        return true;
+    }
+
 
     public void signInWithGoogle(String idToken) {
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);

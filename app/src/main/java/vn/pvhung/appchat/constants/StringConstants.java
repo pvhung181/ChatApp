@@ -15,6 +15,7 @@ public class StringConstants {
     //region TAG
     public static final String GOOGLE_SIGNIN_TAG = "Google_SignIn";
     public static final String REGISTER_ACTIVITY_TAG = "Register Activity";
+    public static final String LOGIN_ACTIVITY_TAG = "Login Activity";
     public static final String COMET_TAG = "Comet_Chat";
     //endregion TAG
 
@@ -25,6 +26,7 @@ public class StringConstants {
     public static final String KEY_AVATAR = "avatar";
     public static final String KEY_PASSWORD = "password";
     public static final String KEY_ACCOUNT = "account";
+    public static final String IS_SIGNED_IN = "is_signed_in";
 
 
     //endregion user
