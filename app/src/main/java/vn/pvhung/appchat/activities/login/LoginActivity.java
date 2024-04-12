@@ -22,24 +22,36 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.inject.Inject;
+
+import dagger.hilt.android.AndroidEntryPoint;
 import vn.pvhung.appchat.MainActivity;
 import vn.pvhung.appchat.R;
 import vn.pvhung.appchat.activities.home.HomeActivity;
 import vn.pvhung.appchat.activities.register.RegisterActivity;
+import vn.pvhung.appchat.activities.user.UserInforCollectionActivity;
 import vn.pvhung.appchat.constants.SharedPreferenceName;
 import vn.pvhung.appchat.constants.StringConstants;
 import vn.pvhung.appchat.databinding.ActivityLoginBinding;
 import vn.pvhung.appchat.util.Bcrypt;
-import vn.pvhung.appchat.util.PreferenceManager;
+import vn.pvhung.appchat.util.preferenceManager.PreferenceManager;
+import vn.pvhung.appchat.util.preferenceManager.UserPreferenceManager;
 
+@AndroidEntryPoint
 public class LoginActivity extends AppCompatActivity {
 
     ActivityLoginBinding binding;
+
+    @Inject
     FirebaseAuth mAuth;
     GoogleSignInOptions gso;
     GoogleSignInClient gClient;
+    @Inject
     FirebaseFirestore firestore;
-    PreferenceManager appPreferences;
+    PreferenceManager userPreferences;
     ActivityResultLauncher<Intent> launcher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
@@ -63,10 +75,10 @@ public class LoginActivity extends AppCompatActivity {
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        firestore = FirebaseFirestore.getInstance();
-        appPreferences = new PreferenceManager(SharedPreferenceName.KEY_PREFERENCE_NAME, getApplicationContext());
+        //firestore = FirebaseFirestore.getInstance();
+        userPreferences = new UserPreferenceManager(getApplicationContext());
 
-        mAuth = FirebaseAuth.getInstance();
+        //mAuth = FirebaseAuth.getInstance();
 
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getResources().getString(R.string.default_web_client_id))
@@ -92,10 +104,20 @@ public class LoginActivity extends AppCompatActivity {
                                     makeToast("Password is incorrect !!");
                                     binding.passwordInput.requestFocus();
                                 } else {
-                                    appPreferences.putBoolean(StringConstants.IS_SIGNED_IN, true);
-                                    Intent it = new Intent(this, HomeActivity.class);
-                                    it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                    startActivity(it);
+                                    userPreferences.putBoolean(StringConstants.IS_SIGNED_IN, true);
+                                    userPreferences.putString(StringConstants.KEY_USER_NAME, doc.getString(StringConstants.KEY_USER_NAME));
+
+                                    if(Boolean.TRUE.equals(doc.getBoolean(StringConstants.IS_FIRST_TIME))) {
+                                        Intent it = new Intent(this, HomeActivity.class);
+                                        it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                                        startActivity(it);
+                                    }else {
+                                        Intent it = new Intent(this, UserInforCollectionActivity.class);
+                                        it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                                        startActivity(it);
+                                    }
+
+
                                     finish();
                                 }
                             } else {
@@ -152,17 +174,45 @@ public class LoginActivity extends AppCompatActivity {
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
         mAuth.signInWithCredential(credential)
                 .addOnSuccessListener(suc -> {
-                    Log.e(StringConstants.GOOGLE_SIGNIN_TAG, suc.getUser().getEmail());
-                    startActivity(new Intent(this, HomeActivity.class));
+                    firestore.collection(StringConstants.KEY_COLLECTIONS_USER)
+                            .whereEqualTo(StringConstants.KEY_USER_NAME, suc.getUser().getEmail())
+                            .get()
+                            .addOnSuccessListener(s -> {
+                                if(s.getDocuments().size() == 0) {
+                                    Map<String, Object> data = new HashMap<>();
+                                    data.put(StringConstants.KEY_USER_NAME, suc.getUser().getEmail());
+                                    data.put(StringConstants.IS_FIRST_TIME, true);
+                                    data.put(StringConstants.KEY_PASSWORD, "");
+
+                                    firestore.collection(StringConstants.KEY_COLLECTIONS_USER)
+                                            .add(data);
+
+                                    Intent it = new Intent(this, UserInforCollectionActivity.class);
+                                    it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    startActivity(it);
+                                }else {
+                                    //TODO
+                                    DocumentSnapshot doc = s.getDocuments().get(0);
+                                    if(Boolean.TRUE.equals(doc.getBoolean(StringConstants.IS_FIRST_TIME))) {
+                                        Intent it = new Intent(this, UserInforCollectionActivity.class);
+                                        it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        startActivity(it);
+                                    }
+                                    else {
+                                        Intent it = new Intent(this, HomeActivity.class);
+                                        it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        startActivity(it);
+                                    }
+                                }
+                            });
+                    binding.loadingPanel.setVisibility(View.GONE);
+                    finish();
                 })
                 .addOnFailureListener(fail -> {
                     Log.e(StringConstants.GOOGLE_SIGNIN_TAG, "Failed to sign in with google");
-                    Toast.makeText(this, "Fail to sign in with google", Toast.LENGTH_SHORT).show();
-                })
-                .addOnCompleteListener(task -> {
                     binding.loadingPanel.setVisibility(View.GONE);
+                    Toast.makeText(this, "Fail to sign in with google", Toast.LENGTH_SHORT).show();
                 });
-
     }
 
     public void signInWithFacebook() {

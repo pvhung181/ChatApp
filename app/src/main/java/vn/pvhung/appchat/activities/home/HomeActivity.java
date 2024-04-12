@@ -9,27 +9,33 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.List;
 
-import vn.pvhung.appchat.MainActivity;
 import vn.pvhung.appchat.R;
+import vn.pvhung.appchat.constants.SharedPreferenceName;
 import vn.pvhung.appchat.databinding.ActivityHomeBinding;
 import vn.pvhung.appchat.fragments.friends.FriendFragment;
 import vn.pvhung.appchat.fragments.home.HomeFragment;
 import vn.pvhung.appchat.fragments.setting.SettingFragment;
+import vn.pvhung.appchat.util.preferenceManager.PreferenceManager;
+import vn.pvhung.appchat.util.preferenceManager.UserPreferenceManager;
 
 public class HomeActivity extends AppCompatActivity {
 
     ActivityHomeBinding binding;
     FirebaseUser currentUser;
 
+    PreferenceManager userPreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
+
+        userPreferences = new UserPreferenceManager(getApplicationContext());
+
         setContentView(binding.getRoot());
 
         setupNavigationBottomAppBar();

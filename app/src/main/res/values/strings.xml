@@ -3,6 +3,16 @@
 
     <string name="app_name">HChat</string>
     <string name="copyright">Copyright: Pvhung</string>
+
+    <!--    Screens-->
+
+    <string name="user_infor_collection">User information</string>
+    <string name="display_name">Display Name</string>
+    <string name="email">Email</string>
+    <string name="city">City</string>
+    <string name="address">Address</string>
+    <string name="confirm">Confirm</string>
+
     <!--    Welcome fragment-->
     <string name="welcome_title">Welcome to HChat</string>
     <string name="login">Login</string>

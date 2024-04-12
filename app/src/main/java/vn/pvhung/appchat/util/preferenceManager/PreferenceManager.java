@@ -1,20 +1,25 @@
-package vn.pvhung.appchat.util;
+package vn.pvhung.appchat.util.preferenceManager;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 
 import dagger.hilt.android.qualifiers.ApplicationContext;
 import vn.pvhung.appchat.constants.SharedPreferenceName;
+import vn.pvhung.appchat.constants.StringConstants;
 
-public class PreferenceManager {
-    SharedPreferences sharedPreferences;
+public abstract class PreferenceManager {
+    protected SharedPreferences sharedPreferences;
 
     public PreferenceManager(String preferenceName, @ApplicationContext Context context) {
+
         if(preferenceName.equals(SharedPreferenceName.SIGNED_IN_ACCOUNT)) {
             sharedPreferences = context.getSharedPreferences(SharedPreferenceName.SIGNED_IN_ACCOUNT, Context.MODE_PRIVATE);
         }
-        else if(preferenceName.equals(SharedPreferenceName.KEY_PREFERENCE_NAME)) {
-            sharedPreferences = context.getSharedPreferences(SharedPreferenceName.KEY_PREFERENCE_NAME, Context.MODE_PRIVATE);
+        else if(preferenceName.equals(SharedPreferenceName.KEY_APP_PREFERENCES)) {
+            sharedPreferences = context.getSharedPreferences(SharedPreferenceName.KEY_APP_PREFERENCES, Context.MODE_PRIVATE);
+        }
+        else if (preferenceName.equals(SharedPreferenceName.USER_INFOR_PREFERENCES)) {
+            sharedPreferences = context.getSharedPreferences(SharedPreferenceName.USER_INFOR_PREFERENCES, Context.MODE_PRIVATE);
         }
     }
 
@@ -43,6 +48,7 @@ public class PreferenceManager {
         editor.remove(key);
         editor.apply();
     }
+
 
     public void clear() {
         sharedPreferences.edit().clear().apply();

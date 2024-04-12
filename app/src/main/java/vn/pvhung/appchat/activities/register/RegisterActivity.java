@@ -14,17 +14,23 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import vn.pvhung.appchat.activities.login.LoginActivity;
 import vn.pvhung.appchat.constants.SharedPreferenceName;
 import vn.pvhung.appchat.constants.StringConstants;
 import vn.pvhung.appchat.databinding.ActivityRegisterBinding;
 import vn.pvhung.appchat.util.Bcrypt;
-import vn.pvhung.appchat.util.PreferenceManager;
+import vn.pvhung.appchat.util.preferenceManager.PreferenceManager;
+import vn.pvhung.appchat.util.preferenceManager.SignedPreferenceManager;
 
 public class RegisterActivity extends AppCompatActivity {
 
     ActivityRegisterBinding binding;
+    @Inject
     FirebaseAuth firebaseAuth;
+
+    @Inject
     FirebaseFirestore firestore;
     PreferenceManager signedPreference;
 
@@ -33,9 +39,7 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityRegisterBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        firebaseAuth = FirebaseAuth.getInstance();
-        firestore = FirebaseFirestore.getInstance();
-        signedPreference = new PreferenceManager(SharedPreferenceName.SIGNED_IN_ACCOUNT, getApplicationContext());
+        signedPreference = new SignedPreferenceManager(getApplicationContext());
 
         setListeners();
     }
@@ -66,6 +70,7 @@ public class RegisterActivity extends AppCompatActivity {
                         else {
                             Map<String, Object> data = new HashMap<>();
                             data.put(StringConstants.KEY_USER_NAME, email);
+                            data.put(StringConstants.IS_FIRST_TIME, true);
                             data.put(StringConstants.KEY_PASSWORD, Bcrypt.hashPassword(password));
 
                             signedPreference.putBoolean(email, true);

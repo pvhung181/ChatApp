@@ -21,6 +21,7 @@ public class StringConstants {
 
     //region user
     public static final String KEY_COLLECTIONS_USER = "users";
+    public static final String IS_FIRST_TIME = "is_first_time";
     public static final String KEY_USER_NAME = "username";
     public static final String KEY_DISPLAY_NAME = "display_name";
     public static final String KEY_AVATAR = "avatar";

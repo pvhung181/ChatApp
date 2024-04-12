@@ -11,16 +11,17 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.gms.auth.api.Auth;
 import com.google.firebase.auth.FirebaseAuth;
 
-import vn.pvhung.appchat.MainActivity;
-import vn.pvhung.appchat.activities.home.HomeActivity;
 import vn.pvhung.appchat.activities.login.LoginActivity;
+import vn.pvhung.appchat.constants.SharedPreferenceName;
 import vn.pvhung.appchat.databinding.FragmentSettingBinding;
+import vn.pvhung.appchat.util.preferenceManager.PreferenceManager;
+import vn.pvhung.appchat.util.preferenceManager.UserPreferenceManager;
 
 public class SettingFragment extends Fragment {
     FragmentSettingBinding binding;
+    UserPreferenceManager userPreferences;
 
     @Nullable
     @Override
@@ -32,12 +33,14 @@ public class SettingFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        userPreferences = new UserPreferenceManager(getActivity().getApplicationContext());
         binding.signoutBtn.setOnClickListener(v -> {
             FirebaseAuth.getInstance().signOut();
+            userPreferences.clearAllUserInformation();
             Intent intent = new Intent(getActivity(), LoginActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
+            getActivity().finish();
         });
     }
 

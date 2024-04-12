@@ -1,6 +1,7 @@
 package vn.pvhung.appchat;
 
 import android.app.Application;
+import android.content.res.AssetManager;
 import android.util.Log;
 
 import com.cometchat.chat.core.AppSettings;
@@ -26,6 +27,11 @@ public class HChatApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
+
+
+    }
+
+    private void initCometChat() {
         CometChat.init(this, StringConstants.APP_ID, appSettings, new CometChat.CallbackListener<String>() {
             @Override
             public void onSuccess(String s) {
@@ -37,7 +43,6 @@ public class HChatApplication extends Application {
                 Log.e(StringConstants.COMET_TAG, "Initialization failed with exception: " + e.getMessage());
             }
         });
-
     }
 
     private void initCometChatUiKit() {
