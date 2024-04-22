@@ -31,7 +31,10 @@
             android:layout_width="@dimen/_80sdp"
             android:layout_height="@dimen/_80sdp"
             android:background="@drawable/background_image"
+            android:src="@drawable/default_avatar"
+            android:scaleType="centerCrop"
             android:layout_gravity="center"
+            app:riv_oval="true"
             />
 
         <TextView
@@ -55,6 +58,21 @@
             android:background="@drawable/background_edittext"
             android:layout_height="wrap_content"
             android:hint="@string/display_name"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/birth_day_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_8sdp"
+        >
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/birth_day"
+            android:layout_width="match_parent"
+            android:focusable="false"
+            android:background="@drawable/background_edittext"
+            android:layout_height="wrap_content"
+            android:hint="@string/dd_mm_yyyy"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -107,7 +125,4 @@
         android:text="@string/confirm"
         android:layout_gravity="end"
         android:layout_margin="@dimen/_12sdp"/>
-
-
-
 </LinearLayout>

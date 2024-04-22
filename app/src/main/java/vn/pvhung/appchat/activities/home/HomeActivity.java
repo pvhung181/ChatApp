@@ -13,6 +13,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.util.List;
 
+import dagger.hilt.android.AndroidEntryPoint;
 import vn.pvhung.appchat.R;
 import vn.pvhung.appchat.constants.SharedPreferenceName;
 import vn.pvhung.appchat.databinding.ActivityHomeBinding;
@@ -21,13 +22,14 @@ import vn.pvhung.appchat.fragments.home.HomeFragment;
 import vn.pvhung.appchat.fragments.setting.SettingFragment;
 import vn.pvhung.appchat.util.preferenceManager.PreferenceManager;
 import vn.pvhung.appchat.util.preferenceManager.UserPreferenceManager;
+@AndroidEntryPoint
 
 public class HomeActivity extends AppCompatActivity {
 
     ActivityHomeBinding binding;
     FirebaseUser currentUser;
 
-    PreferenceManager userPreferences;
+    UserPreferenceManager userPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

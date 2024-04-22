@@ -22,6 +22,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -51,7 +52,7 @@ public class LoginActivity extends AppCompatActivity {
     GoogleSignInClient gClient;
     @Inject
     FirebaseFirestore firestore;
-    PreferenceManager userPreferences;
+    UserPreferenceManager userPreferences;
     ActivityResultLauncher<Intent> launcher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
@@ -106,12 +107,16 @@ public class LoginActivity extends AppCompatActivity {
                                 } else {
                                     userPreferences.putBoolean(StringConstants.IS_SIGNED_IN, true);
                                     userPreferences.putString(StringConstants.KEY_USER_NAME, doc.getString(StringConstants.KEY_USER_NAME));
+                                    userPreferences.putString(StringConstants.KEY_DOCUMENT_ID, doc.getId());
+                                    //userPreferences.putBoolean(StringConstants.IS_FIRST_TIME, doc.getBoolean(StringConstants.IS_FIRST_TIME, true));
 
-                                    if(Boolean.TRUE.equals(doc.getBoolean(StringConstants.IS_FIRST_TIME))) {
+                                    if (!Boolean.TRUE.equals(doc.getBoolean(StringConstants.IS_FIRST_TIME))) {
+                                        userPreferences.putBoolean(StringConstants.IS_FIRST_TIME, false);
                                         Intent it = new Intent(this, HomeActivity.class);
                                         it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                                         startActivity(it);
-                                    }else {
+                                    } else {
+                                        userPreferences.putBoolean(StringConstants.IS_FIRST_TIME, true);
                                         Intent it = new Intent(this, UserInforCollectionActivity.class);
                                         it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                                         startActivity(it);
@@ -174,37 +179,42 @@ public class LoginActivity extends AppCompatActivity {
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
         mAuth.signInWithCredential(credential)
                 .addOnSuccessListener(suc -> {
-                    firestore.collection(StringConstants.KEY_COLLECTIONS_USER)
-                            .whereEqualTo(StringConstants.KEY_USER_NAME, suc.getUser().getEmail())
-                            .get()
-                            .addOnSuccessListener(s -> {
-                                if(s.getDocuments().size() == 0) {
-                                    Map<String, Object> data = new HashMap<>();
-                                    data.put(StringConstants.KEY_USER_NAME, suc.getUser().getEmail());
-                                    data.put(StringConstants.IS_FIRST_TIME, true);
-                                    data.put(StringConstants.KEY_PASSWORD, "");
+//                    firestore.collection(StringConstants.KEY_COLLECTIONS_USER)
+//                            .whereEqualTo(StringConstants.KEY_USER_NAME, suc.getUser().getUid())
+//                            .get()
+//                            .addOnSuccessListener(s -> {
+//                                if(s.getDocuments().size() == 0) {
+//                                    Map<String, Object> data = new HashMap<>();
+//                                    data.put(StringConstants.KEY_USER_NAME, suc.getUser().getUid());
+//
+//                                    firestore.collection(StringConstants.KEY_COLLECTIONS_USER)
+//                                            .add(data);
+//
+//                                    Intent it = new Intent(this, UserInforCollectionActivity.class);
+//                                    it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+//                                    startActivity(it);
+//                                }
+//                                else {
+//                                    DocumentSnapshot doc = s.getDocuments().get(0);
+//                                    userPreferences.putString(StringConstants.KEY_DOCUMENT_ID, doc.getId());
+//                                    if(Boolean.TRUE.equals(doc.getBoolean(StringConstants.IS_FIRST_TIME))) {
+//                                        Intent it = new Intent(this, UserInforCollectionActivity.class);
+//                                        it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+//                                        startActivity(it);
+//                                    }
+//                                    else {
+//                                        Intent it = new Intent(this, HomeActivity.class);
+//                                        it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+//                                        startActivity(it);
+//                                    }
+//                                }
+//                            });
 
-                                    firestore.collection(StringConstants.KEY_COLLECTIONS_USER)
-                                            .add(data);
+                    userPreferences.putAllNecessaryInfor(suc.getUser());
 
-                                    Intent it = new Intent(this, UserInforCollectionActivity.class);
-                                    it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                    startActivity(it);
-                                }else {
-                                    //TODO
-                                    DocumentSnapshot doc = s.getDocuments().get(0);
-                                    if(Boolean.TRUE.equals(doc.getBoolean(StringConstants.IS_FIRST_TIME))) {
-                                        Intent it = new Intent(this, UserInforCollectionActivity.class);
-                                        it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                        startActivity(it);
-                                    }
-                                    else {
-                                        Intent it = new Intent(this, HomeActivity.class);
-                                        it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                        startActivity(it);
-                                    }
-                                }
-                            });
+                    Intent it = new Intent(this, HomeActivity.class);
+                    it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(it);
                     binding.loadingPanel.setVisibility(View.GONE);
                     finish();
                 })

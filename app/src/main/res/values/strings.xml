@@ -12,6 +12,7 @@
     <string name="city">City</string>
     <string name="address">Address</string>
     <string name="confirm">Confirm</string>
+    <string name="dd_mm_yyyy">DD/MM/YYYY</string>
 
     <!--    Welcome fragment-->
     <string name="welcome_title">Welcome to HChat</string>

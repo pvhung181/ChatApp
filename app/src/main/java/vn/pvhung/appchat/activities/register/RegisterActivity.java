@@ -16,30 +16,26 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import dagger.hilt.android.AndroidEntryPoint;
 import vn.pvhung.appchat.activities.login.LoginActivity;
-import vn.pvhung.appchat.constants.SharedPreferenceName;
 import vn.pvhung.appchat.constants.StringConstants;
 import vn.pvhung.appchat.databinding.ActivityRegisterBinding;
 import vn.pvhung.appchat.util.Bcrypt;
-import vn.pvhung.appchat.util.preferenceManager.PreferenceManager;
-import vn.pvhung.appchat.util.preferenceManager.SignedPreferenceManager;
 
+@AndroidEntryPoint
 public class RegisterActivity extends AppCompatActivity {
 
     ActivityRegisterBinding binding;
     @Inject
     FirebaseAuth firebaseAuth;
-
     @Inject
     FirebaseFirestore firestore;
-    PreferenceManager signedPreference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityRegisterBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        signedPreference = new SignedPreferenceManager(getApplicationContext());
 
         setListeners();
     }
@@ -73,8 +69,6 @@ public class RegisterActivity extends AppCompatActivity {
                             data.put(StringConstants.IS_FIRST_TIME, true);
                             data.put(StringConstants.KEY_PASSWORD, Bcrypt.hashPassword(password));
 
-                            signedPreference.putBoolean(email, true);
-
                             firestore.collection(StringConstants.KEY_COLLECTIONS_USER).add(data).addOnSuccessListener(success -> {
                                 Intent intent = new Intent(this, LoginActivity.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -87,7 +81,8 @@ public class RegisterActivity extends AppCompatActivity {
 
                     })
                     .addOnFailureListener(e -> {
-                        Log.e(StringConstants.REGISTER_ACTIVITY_TAG, e.getMessage());
+                        makeToast(e.getMessage());
+                        binding.usernameInput.requestFocus();
                     })
                     .addOnCompleteListener(com -> {
                         binding.loadingPanel.setVisibility(View.GONE);
@@ -115,10 +110,6 @@ public class RegisterActivity extends AppCompatActivity {
         } else if (!binding.passwordInput.getText().toString().equals(binding.repasswordInput.getText().toString())) {
             makeToast("Password not match !");
             binding.repasswordInput.requestFocus();
-            return false;
-        } else if (signedPreference.getBoolean(binding.usernameInput.getText().toString())) {
-            makeToast("Username already existed!");
-            binding.usernameInput.requestFocus();
             return false;
         }
         return true;

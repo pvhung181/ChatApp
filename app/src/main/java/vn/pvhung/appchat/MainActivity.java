@@ -11,6 +11,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import vn.pvhung.appchat.activities.home.HomeActivity;
 import vn.pvhung.appchat.activities.login.LoginActivity;
 import vn.pvhung.appchat.activities.register.RegisterActivity;
+import vn.pvhung.appchat.activities.user.UserInforCollectionActivity;
 import vn.pvhung.appchat.constants.SharedPreferenceName;
 import vn.pvhung.appchat.constants.StringConstants;
 import vn.pvhung.appchat.databinding.ActivityMainBinding;
@@ -45,10 +46,19 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         auth = FirebaseAuth.getInstance();
         if (auth.getCurrentUser() != null || userPreferenceManager.getBoolean(StringConstants.IS_SIGNED_IN)) {
-            Intent intent = new Intent(this, HomeActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-            MainActivity.this.finish();
+            if(userPreferenceManager.getBoolean(StringConstants.IS_FIRST_TIME)) {
+                Intent intent = new Intent(this, UserInforCollectionActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                MainActivity.this.finish();
+            }
+            else {
+                Intent intent = new Intent(this, HomeActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                MainActivity.this.finish();
+            }
+
         }
     }
 

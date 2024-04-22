@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId = "vn.pvhung.appchat"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -73,6 +73,14 @@ dependencies {
     //ssp vs sdp
     implementation("com.intuit.sdp:sdp-android:1.1.1")
     implementation("com.intuit.ssp:ssp-android:1.1.1")
+
+    //picasso
+    implementation("com.squareup.picasso:picasso:2.71828")
+    implementation("jp.wasabeef:picasso-transformations:2.4.0")
+
+    //rxjava
+    implementation("io.reactivex.rxjava3:rxjava:3.1.8")
+
 
 
     testImplementation("junit:junit:4.13.2")
