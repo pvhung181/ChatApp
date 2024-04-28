@@ -77,7 +77,6 @@ public class UserInforCollectionActivity extends AppCompatActivity {
 
     private void setListeners() {
         binding.confirmButton.setOnClickListener(v -> {
-            updateExistingDocument();
             if(!isValidInfor()) return;
             updateExistingDocument();
 
@@ -143,6 +142,8 @@ public class UserInforCollectionActivity extends AppCompatActivity {
                     vals.put(StringConstants.KEY_BIRTH, binding.birthDay.getText().toString());
                     vals.put(StringConstants.KEY_CITY, binding.cityEditText.getText().toString());
                     vals.put(StringConstants.KEY_ADDRESS, binding.addressEditText.getText().toString());
+                    vals.put(StringConstants.IS_FIRST_TIME, false);
+                    userPreferences.putBoolean(StringConstants.IS_FIRST_TIME, false);
                     if(encodedImage != null) vals.put(StringConstants.KEY_AVATAR, encodedImage);
                     else {
                         Bitmap icon = BitmapFactory.decodeResource(this.getResources(), R.drawable.default_avatar);

@@ -1,21 +1,34 @@
 package vn.pvhung.appchat.activities.home;
 
+import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.ColorRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.messaging.FirebaseMessaging;
 
+import java.time.temporal.ValueRange;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
 import vn.pvhung.appchat.R;
+import vn.pvhung.appchat.activities.login.LoginActivity;
+import vn.pvhung.appchat.activities.users.UsersActivity;
 import vn.pvhung.appchat.constants.SharedPreferenceName;
+import vn.pvhung.appchat.constants.StringConstants;
 import vn.pvhung.appchat.databinding.ActivityHomeBinding;
 import vn.pvhung.appchat.fragments.friends.FriendFragment;
 import vn.pvhung.appchat.fragments.home.HomeFragment;
@@ -29,6 +42,9 @@ public class HomeActivity extends AppCompatActivity {
     ActivityHomeBinding binding;
     FirebaseUser currentUser;
 
+    @Inject
+    FirebaseFirestore firestore;
+
     UserPreferenceManager userPreferences;
 
     @Override
@@ -41,7 +57,17 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         setupNavigationBottomAppBar();
+        setListeners();
+
+        getToken();
     }
+
+    private void setListeners() {
+        binding.addBtn.setOnClickListener(v -> {
+            startActivity(new Intent(this, UsersActivity.class));
+        });
+    }
+
 
     private void setupNavigationBottomAppBar() {
 
@@ -99,4 +125,39 @@ public class HomeActivity extends AppCompatActivity {
     public boolean onNavigateUp() {
         return super.onNavigateUp();
     }
+
+    private void makeToast(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    private void getToken() {
+        FirebaseMessaging.getInstance().getToken().addOnSuccessListener(this::updateFcmToken);
+    }
+
+    private void updateFcmToken(String token) {
+        DocumentReference df =  firestore.collection(StringConstants.KEY_COLLECTIONS_USER)
+                .document(userPreferences.getString(StringConstants.KEY_DOCUMENT_ID));
+
+        df.update(StringConstants.KEY_FCM_TOKEN, token)
+                .addOnSuccessListener(v -> makeToast("Token updated successfully"))
+                .addOnFailureListener(e -> makeToast("Fail to update token"));
+    }
+
+    public void signout() {
+        DocumentReference df =  firestore.collection(StringConstants.KEY_COLLECTIONS_USER)
+                .document(userPreferences.getString(StringConstants.KEY_DOCUMENT_ID));
+
+        df.update(StringConstants.KEY_FCM_TOKEN, FieldValue.delete())
+                .addOnSuccessListener(v -> {
+                    makeToast("Token deleted successfully");
+                    FirebaseAuth.getInstance().signOut();
+                    userPreferences.clearAllUserInformation();
+                    Intent intent = new Intent(this, LoginActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    finish();
+                })
+                .addOnFailureListener(e -> makeToast("Fail to delete token"));
+    }
+
 }

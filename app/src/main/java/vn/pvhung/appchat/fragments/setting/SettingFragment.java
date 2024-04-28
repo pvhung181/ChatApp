@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,6 +18,9 @@ import androidx.fragment.app.Fragment;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -28,6 +32,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 import dagger.hilt.internal.ComponentEntryPoint;
 import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 import vn.pvhung.appchat.R;
+import vn.pvhung.appchat.activities.home.HomeActivity;
 import vn.pvhung.appchat.activities.login.LoginActivity;
 import vn.pvhung.appchat.constants.SharedPreferenceName;
 import vn.pvhung.appchat.constants.StringConstants;
@@ -82,15 +87,13 @@ public class SettingFragment extends Fragment {
 
     public void setListeners() {
         binding.signoutBtn.setOnClickListener(v -> {
-            FirebaseAuth.getInstance().signOut();
-            userPreferences.clearAllUserInformation();
-            Intent intent = new Intent(getActivity(), LoginActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-            getActivity().finish();
+            ((HomeActivity)requireActivity()).signout();
         });
     }
 
+    private void makeToast(String message) {
+        Toast.makeText(requireActivity(), message, Toast.LENGTH_SHORT).show();
+    }
 
     @Override
     public void onPause() {
