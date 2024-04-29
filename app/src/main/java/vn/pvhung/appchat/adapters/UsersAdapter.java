@@ -1,17 +1,13 @@
 package vn.pvhung.appchat.adapters;
 
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-import vn.pvhung.appchat.R;
 import vn.pvhung.appchat.databinding.ItemUserContainerBinding;
 import vn.pvhung.appchat.helpers.ImageHelper;
 import vn.pvhung.appchat.models.User;
