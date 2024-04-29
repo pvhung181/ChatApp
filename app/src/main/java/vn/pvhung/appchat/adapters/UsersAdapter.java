@@ -12,12 +12,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import vn.pvhung.appchat.R;
+import vn.pvhung.appchat.databinding.ItemUserContainerBinding;
 import vn.pvhung.appchat.helpers.ImageHelper;
 import vn.pvhung.appchat.models.User;
 
 public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHolder> {
 
-    private List<User> users = null;
+    private final List<User> users;
 
     public UsersAdapter(List<User> users) {
         this.users = users;
@@ -26,9 +27,13 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
     @NonNull
     @Override
     public UserViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_user_container, parent, false);
-        return new UserViewHolder(view);
+        ItemUserContainerBinding itemUserContainerBinding = ItemUserContainerBinding
+                .inflate(
+                        LayoutInflater.from(parent.getContext()),
+                        parent,
+                        false
+                );
+        return new UserViewHolder(itemUserContainerBinding);
     }
 
     @Override
@@ -42,34 +47,17 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
     }
 
     public static class UserViewHolder extends RecyclerView.ViewHolder {
-        private final ImageView avatar;
-        private final TextView displayName;
-        private final TextView username;
+        private ItemUserContainerBinding binding;
 
-        public UserViewHolder(@NonNull View itemView) {
-            super(itemView);
-
-            avatar = itemView.findViewById(R.id.avatar);
-            displayName = itemView.findViewById(R.id.display_name);
-            username = itemView.findViewById(R.id.user_name);
+        public UserViewHolder(ItemUserContainerBinding itemUserContainerBinding) {
+            super(itemUserContainerBinding.getRoot());
+            binding = itemUserContainerBinding;
         }
 
         public void setUserData(User user) {
-            avatar.setImageBitmap(ImageHelper.decodeImage(user.getImage()));
-            displayName.setText(user.getName());
-            username.setText(user.getEmail());
-        }
-
-        public ImageView getAvatar() {
-            return avatar;
-        }
-
-        public TextView getDisplayName() {
-            return displayName;
-        }
-
-        public TextView getUsername() {
-            return username;
+            binding.avatar.setImageBitmap(ImageHelper.decodeImage(user.getImage()));
+            binding.displayName.setText(user.getDisplayName());
+            binding.userName.setText(String.format("@%s", user.getUsername()));
         }
     }
 }

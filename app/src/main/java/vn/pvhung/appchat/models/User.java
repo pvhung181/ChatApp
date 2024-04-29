@@ -1,17 +1,19 @@
 package vn.pvhung.appchat.models;
 
-public class User {
-    private String name;
+import java.io.Serializable;
+
+public class User implements Serializable {
+    private String displayName;
     private String image;
-    private String email;
+    private String username;
     private String token;
 
-    public String getName() {
-        return name;
+    public String getDisplayName() {
+        return displayName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 
     public String getImage() {
@@ -22,12 +24,12 @@ public class User {
         this.image = image;
     }
 
-    public String getEmail() {
-        return email;
+    public String getUsername() {
+        return username;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getToken() {

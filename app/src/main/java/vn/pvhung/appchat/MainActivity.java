@@ -1,21 +1,18 @@
 package vn.pvhung.appchat;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.cometchat.chat.models.User;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.firebase.auth.FirebaseAuth;
 
 import vn.pvhung.appchat.activities.home.HomeActivity;
 import vn.pvhung.appchat.activities.login.LoginActivity;
 import vn.pvhung.appchat.activities.register.RegisterActivity;
 import vn.pvhung.appchat.activities.user.UserInforCollectionActivity;
-import vn.pvhung.appchat.constants.SharedPreferenceName;
 import vn.pvhung.appchat.constants.StringConstants;
 import vn.pvhung.appchat.databinding.ActivityMainBinding;
-import vn.pvhung.appchat.util.preferenceManager.PreferenceManager;
 import vn.pvhung.appchat.util.preferenceManager.UserPreferenceManager;
 
 public class MainActivity extends AppCompatActivity {

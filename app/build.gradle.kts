@@ -61,8 +61,8 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics:21.6.1")
 
     //cometchat
-    implementation("com.cometchat:chat-sdk-android:4.0.5")
-    implementation("com.cometchat:chat-uikit-android:4.2.2")
+//    implementation("com.cometchat:chat-sdk-android:4.0.5")
+//    implementation("com.cometchat:chat-uikit-android:4.2.2")
 
     //jbcrypt
     implementation("org.mindrot:jbcrypt:0.4")
