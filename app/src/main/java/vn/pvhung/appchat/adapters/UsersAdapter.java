@@ -10,14 +10,17 @@ import java.util.List;
 
 import vn.pvhung.appchat.databinding.ItemUserContainerBinding;
 import vn.pvhung.appchat.helpers.ImageHelper;
+import vn.pvhung.appchat.listeners.UserListener;
 import vn.pvhung.appchat.models.User;
 
 public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHolder> {
 
     private final List<User> users;
+    UserListener userListener;
 
-    public UsersAdapter(List<User> users) {
+    public UsersAdapter(List<User> users, UserListener userListener) {
         this.users = users;
+        this.userListener = userListener;
     }
 
     @NonNull
@@ -34,7 +37,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
 
     @Override
     public void onBindViewHolder(@NonNull UserViewHolder holder, int position) {
-        holder.setUserData(users.get(position));
+        holder.setUserData(users.get(position), userListener);
     }
 
     @Override
@@ -50,10 +53,13 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
             binding = itemUserContainerBinding;
         }
 
-        public void setUserData(User user) {
+        public void setUserData(User user, UserListener listener) {
             binding.avatar.setImageBitmap(ImageHelper.decodeImage(user.getImage()));
             binding.displayName.setText(user.getDisplayName());
             binding.userName.setText(String.format("@%s", user.getUsername()));
+
+            if (listener != null)
+                binding.userLayout.setOnClickListener(v -> listener.onUserClicked(user));
         }
     }
 }

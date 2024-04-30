@@ -31,11 +31,7 @@
         android:id="@+id/text_datetime"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="1234"
         app:layout_constraintStart_toStartOf="@id/text_message"
         app:layout_constraintTop_toBottomOf="@id/text_message"
         android:textSize="@dimen/_10ssp"/>
-
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

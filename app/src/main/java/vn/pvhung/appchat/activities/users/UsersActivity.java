@@ -2,6 +2,7 @@ package vn.pvhung.appchat.activities.users;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -10,13 +11,15 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.List;
 
+import vn.pvhung.appchat.activities.chat.ChatActivity;
 import vn.pvhung.appchat.adapters.UsersAdapter;
 import vn.pvhung.appchat.constants.StringConstants;
 import vn.pvhung.appchat.databinding.ActivityUsersBinding;
+import vn.pvhung.appchat.listeners.UserListener;
 import vn.pvhung.appchat.models.User;
 import vn.pvhung.appchat.util.preferenceManager.UserPreferenceManager;
 
-public class UsersActivity extends AppCompatActivity {
+public class UsersActivity extends AppCompatActivity implements UserListener {
 
     ActivityUsersBinding binding;
     UserPreferenceManager userPreferenceManager;
@@ -69,7 +72,7 @@ public class UsersActivity extends AppCompatActivity {
                    }
                    loading(false);
                    if(!result.isEmpty()) {
-                       UsersAdapter usersAdapter = new UsersAdapter(result);
+                       UsersAdapter usersAdapter = new UsersAdapter(result, this);
                        binding.listUser.setAdapter(usersAdapter);
                    }
                    else {
@@ -80,4 +83,11 @@ public class UsersActivity extends AppCompatActivity {
                 });
     }
 
+    @Override
+    public void onUserClicked(User user) {
+        Intent it = new Intent(this, ChatActivity.class);
+        it.putExtra(StringConstants.KEY_USER, user);
+        it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(it);
+    }
 }
