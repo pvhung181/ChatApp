@@ -1,5 +1,9 @@
 package vn.pvhung.appchat.helpers;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 public class DateHelper {
     public final static int DD_MM_YYYY = 1;
 
@@ -19,5 +23,8 @@ public class DateHelper {
 
     private static String paddingStartZero(String v) {
         return v.length() == 1 ? "0" + v : v;
+    }
+    public static String getReadableDate(Date date) {
+        return new SimpleDateFormat("MMMM dd, yyyy - hh:mm a", Locale.getDefault()).format(date);
     }
 }

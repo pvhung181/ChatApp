@@ -31,5 +31,10 @@ public class StringConstants {
     public static final String KEY_ACCOUNT = "account";
     public static final String IS_SIGNED_IN = "is_signed_in";
     public static final String KEY_USER = "user";
+    public static final String KEY_COLLECTIONS_CHAT = "chats";
+    public static final String KEY_SENDER_ID = "sender_id";
+    public static final String KEY_RECEIVER_ID = "receiver_id";
+    public static final String KEY_MESSAGE = "message";
+    public static final String KEY_TIMESTAMP = "time_stamp";
     //endregion user
 }

@@ -36,7 +36,7 @@ public class UsersActivity extends AppCompatActivity implements UserListener {
     }
 
     private void loading(boolean isLoading) {
-        if(isLoading)  binding.loadingProgressBar.setVisibility(View.VISIBLE);
+        if (isLoading) binding.loadingProgressBar.setVisibility(View.VISIBLE);
         else binding.loadingProgressBar.setVisibility(View.INVISIBLE);
     }
 
@@ -57,27 +57,27 @@ public class UsersActivity extends AppCompatActivity implements UserListener {
                 .get()
                 .addOnCompleteListener(task -> {
                     String currentUserId = userPreferenceManager.getString(StringConstants.KEY_DOCUMENT_ID);
-                   if(task.isSuccessful() && task.getResult() != null) {
-                       task.getResult().getDocuments().forEach(val -> {
-                           if(!val.getId().equals(currentUserId)) {
-                               User user = new User();
-                               user.setDisplayName(val.getString(StringConstants.KEY_DISPLAY_NAME));
-                               user.setUsername(val.getString(StringConstants.KEY_USER_NAME));
-                               user.setImage(val.getString(StringConstants.KEY_AVATAR));
-                               user.setToken(val.getString(StringConstants.KEY_FCM_TOKEN));
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        task.getResult().getDocuments().forEach(val -> {
+                            if (!val.getId().equals(currentUserId)) {
+                                User user = new User();
+                                user.setDisplayName(val.getString(StringConstants.KEY_DISPLAY_NAME));
+                                user.setUsername(val.getString(StringConstants.KEY_USER_NAME));
+                                user.setImage(val.getString(StringConstants.KEY_AVATAR));
+                                user.setToken(val.getString(StringConstants.KEY_FCM_TOKEN));
+                                user.setUserId(val.getId());
 
-                               result.add(user);
-                           }
-                       });
-                   }
-                   loading(false);
-                   if(!result.isEmpty()) {
-                       UsersAdapter usersAdapter = new UsersAdapter(result, this);
-                       binding.listUser.setAdapter(usersAdapter);
-                   }
-                   else {
-                       showNotFound();
-                   }
+                                result.add(user);
+                            }
+                        });
+                    }
+                    loading(false);
+                    if (!result.isEmpty()) {
+                        UsersAdapter usersAdapter = new UsersAdapter(result, this);
+                        binding.listUser.setAdapter(usersAdapter);
+                    } else {
+                        showNotFound();
+                    }
 
 
                 });

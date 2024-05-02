@@ -1,7 +1,10 @@
 package vn.pvhung.appchat.models;
 
+import java.util.Date;
+
 public class ChatMessage {
     private String senderId, receiverId, message, datetime;
+    private Date dateObj;
 
     public String getSenderId() {
         return senderId;
@@ -9,6 +12,14 @@ public class ChatMessage {
 
     public void setSenderId(String senderId) {
         this.senderId = senderId;
+    }
+
+    public Date getDateObj() {
+        return dateObj;
+    }
+
+    public void setDateObj(Date dateObj) {
+        this.dateObj = dateObj;
     }
 
     public String getReceiverId() {

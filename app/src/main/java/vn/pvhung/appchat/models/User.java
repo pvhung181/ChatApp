@@ -7,6 +7,15 @@ public class User implements Serializable {
     private String image;
     private String username;
     private String token;
+    private String userId;
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
     public String getDisplayName() {
         return displayName;
