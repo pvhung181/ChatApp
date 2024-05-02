@@ -78,6 +78,10 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         void setData(ChatMessage m) {
             binding.textMessage.setText(m.getMessage());
             binding.textDatetime.setText(m.getDatetime());
+//            binding.textMessage.setLongClickable(true);
+//            binding.textMessage.setOnLongClickListener(v -> {
+//
+//            });
         }
 
     }

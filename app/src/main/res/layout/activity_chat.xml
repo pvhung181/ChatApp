@@ -61,12 +61,20 @@
         android:layout_height="0dp"
         app:stackFromEnd="true"
         app:layout_constraintTop_toBottomOf="@+id/topbar_chat"
+        app:layout_constraintBottom_toTopOf="@+id/message_input"
         android:padding="@dimen/_12sdp"
         android:orientation="vertical"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:overScrollMode="never"
         android:visibility="gone"
         />
+
+<!--    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        >
+
+    </ScrollView>-->
 
     <ProgressBar
         android:id="@+id/progress_bar"
