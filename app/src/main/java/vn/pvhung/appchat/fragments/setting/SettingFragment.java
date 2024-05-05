@@ -94,38 +94,4 @@ public class SettingFragment extends Fragment {
     private void makeToast(String message) {
         Toast.makeText(requireActivity(), message, Toast.LENGTH_SHORT).show();
     }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.d("Fragment tag", "On pause call in setting fragment");
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        Log.d("Fragment tag", "onStart call in setting fragment");
-
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        Log.d("Fragment tag", "onStop call in setting fragment");
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.d("Fragment tag", "onResume call in setting fragment");
-
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.d("Fragment tag", "onDestroy call in setting fragment");
-
-    }
 }

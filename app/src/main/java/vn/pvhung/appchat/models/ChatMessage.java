@@ -6,6 +6,32 @@ public class ChatMessage {
     private String senderId, receiverId, message, datetime;
     private Date dateObj;
 
+    private String conversationId, conversationName, conversationImage;
+
+    public String getConversationId() {
+        return conversationId;
+    }
+
+    public void setConversationId(String conversationId) {
+        this.conversationId = conversationId;
+    }
+
+    public String getConversationName() {
+        return conversationName;
+    }
+
+    public void setConversationName(String conversationName) {
+        this.conversationName = conversationName;
+    }
+
+    public String getConversationImage() {
+        return conversationImage;
+    }
+
+    public void setConversationImage(String conversationImage) {
+        this.conversationImage = conversationImage;
+    }
+
     public String getSenderId() {
         return senderId;
     }

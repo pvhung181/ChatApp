@@ -6,6 +6,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -35,6 +36,12 @@ public class ChatActivity extends AppCompatActivity {
     List<ChatMessage> chatMessages;
     UserPreferenceManager userPreferenceManager;
     FirebaseFirestore database;
+    String conversationId = null;
+    private final OnCompleteListener<QuerySnapshot> onCompleteConversationListener = task -> {
+        if(task.isSuccessful() && task.getResult() != null && task.getResult().getDocuments().size() > 0) {
+            conversationId = task.getResult().getDocuments().get(0).getId();
+        }
+    };
 
     private final EventListener<QuerySnapshot> eventListener = (value, error) -> {
         if (error != null) {
@@ -68,6 +75,8 @@ public class ChatActivity extends AppCompatActivity {
         }
 
         binding.progressBar.setVisibility(View.GONE);
+
+        if(conversationId == null) checkForConversation();
     };
 
     @Override
@@ -116,25 +125,6 @@ public class ChatActivity extends AppCompatActivity {
         );
 
         binding.chatRecyclerView.setAdapter(chatAdapter);
-//        database.collection(StringConstants.KEY_COLLECTIONS_CHAT)
-//                .whereIn(
-//                        StringConstants.KEY_SENDER_ID,
-//                        Arrays.asList(userPreferenceManager.getString(StringConstants.KEY_DOCUMENT_ID), userReceiver.getUserId())
-//                )
-//                .get()
-//                .addOnSuccessListener(task -> {
-//                    task.getDocuments().forEach(m -> {
-//
-//                    });
-//
-//
-//                    binding.chatRecyclerView.setAdapter(chatAdapter);
-//                    binding.chatRecyclerView.setVisibility(View.VISIBLE);
-//                    loading(false);
-//
-//                });
-
-
     }
 
     private void loading(boolean isLoading) {
@@ -150,20 +140,67 @@ public class ChatActivity extends AppCompatActivity {
         messages.put(StringConstants.KEY_MESSAGE, binding.messageInput.getText().toString());
         messages.put(StringConstants.KEY_TIMESTAMP, new Date());
 
-        database.collection(StringConstants.KEY_COLLECTIONS_CHAT)
-                .add(messages)
-                .addOnSuccessListener(s -> {
-                    makeToast("Success");
-                })
-                .addOnFailureListener(e -> {
-                    makeToast("Fail");
-                })
-        ;
+        database.collection(StringConstants.KEY_COLLECTIONS_CHAT).add(messages);
+
+        if(conversationId != null) updateConversation(binding.messageInput.getText().toString());
+        else {
+            HashMap<String, Object> cvs = new HashMap<>();
+            cvs.put(StringConstants.KEY_SENDER_ID, userPreferenceManager.getString(StringConstants.KEY_DOCUMENT_ID));
+            cvs.put(StringConstants.KEY_SENDER_NAME, userPreferenceManager.getString(StringConstants.KEY_DISPLAY_NAME));
+            cvs.put(StringConstants.KEY_SENDER_IMAGE, userPreferenceManager.getString(StringConstants.KEY_AVATAR));
+
+            cvs.put(StringConstants.KEY_RECEIVER_ID, userReceiver.getUserId());
+            cvs.put(StringConstants.KEY_RECEIVER_NAME, userReceiver.getDisplayName());
+            cvs.put(StringConstants.KEY_RECEIVER_IMAGE, userReceiver.getImage());
+
+            cvs.put(StringConstants.KEY_LAST_MESSAGE, binding.messageInput.getText().toString());
+
+            cvs.put(StringConstants.KEY_TIMESTAMP, new Date());
+
+            addConversation(cvs);
+        }
 
         binding.messageInput.setText("");
     }
 
     private void makeToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    private void addConversation(HashMap<String, Object> conversation) {
+        database.collection(StringConstants.KEY_COLLECTIONS_CONVERSATION)
+                .add(conversation)
+                .addOnSuccessListener(s -> conversationId = s.getId());
+    }
+
+    private void updateConversation(String message) {
+        database.collection(StringConstants.KEY_COLLECTIONS_CONVERSATION)
+                .document(conversationId)
+                .update(
+                        StringConstants.KEY_LAST_MESSAGE, message,
+                        StringConstants.KEY_TIMESTAMP, new Date()
+                );
+    }
+
+    private void checkForConversation() {
+        if(chatMessages.size() != 0) {
+            checkForConversationRemotely(
+                    userPreferenceManager.getString(StringConstants.KEY_DOCUMENT_ID),
+                    userReceiver.getUserId()
+            );
+
+            checkForConversationRemotely(
+                    userReceiver.getUserId(),
+                    userPreferenceManager.getString(StringConstants.KEY_DOCUMENT_ID)
+            );
+        }
+    }
+
+    private void checkForConversationRemotely(String senderId, String receiverId) {
+        database.collection(StringConstants.KEY_COLLECTIONS_CONVERSATION)
+                .whereEqualTo(StringConstants.KEY_SENDER_ID, senderId)
+                .whereEqualTo(StringConstants.KEY_RECEIVER_ID, receiverId)
+                .get()
+                .addOnCompleteListener(onCompleteConversationListener);
     }
 }

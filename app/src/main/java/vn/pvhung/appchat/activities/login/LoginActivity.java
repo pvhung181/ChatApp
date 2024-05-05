@@ -107,6 +107,7 @@ public class LoginActivity extends AppCompatActivity {
                                 } else {
                                     userPreferences.putBoolean(StringConstants.IS_SIGNED_IN, true);
                                     userPreferences.putString(StringConstants.KEY_USER_NAME, doc.getString(StringConstants.KEY_USER_NAME));
+                                    userPreferences.putString(StringConstants.KEY_DISPLAY_NAME, doc.getString(StringConstants.KEY_DISPLAY_NAME));
                                     userPreferences.putString(StringConstants.KEY_DOCUMENT_ID, doc.getId());
                                     userPreferences.putString(StringConstants.KEY_AVATAR, doc.getString(StringConstants.KEY_AVATAR));
                                     //userPreferences.putBoolean(StringConstants.IS_FIRST_TIME, doc.getBoolean(StringConstants.IS_FIRST_TIME, true));

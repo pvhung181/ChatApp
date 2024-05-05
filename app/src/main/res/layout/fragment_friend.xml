@@ -12,7 +12,7 @@
         android:text="This is friend fragment"/>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_friends_messages"
+        android:id="@+id/recent_conversation_recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

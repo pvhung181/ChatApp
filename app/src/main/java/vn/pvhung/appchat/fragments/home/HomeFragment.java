@@ -1,5 +1,6 @@
 package vn.pvhung.appchat.fragments.home;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,10 +11,22 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import vn.pvhung.appchat.adapters.RecentConversationAdapter;
 import vn.pvhung.appchat.databinding.FragmentHomeBinding;
+import vn.pvhung.appchat.models.ChatMessage;
 
 public class HomeFragment extends Fragment {
     FragmentHomeBinding binding;
+    Activity homeActivity;
+
+    List<ChatMessage> conversations;
+    FirebaseFirestore database;
+    RecentConversationAdapter recentConversationAdapter;
 
     @Nullable
     @Override
@@ -25,39 +38,15 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        homeActivity = requireActivity();
+        init();
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.d("Fragment tag", "On pause call in home fragment");
+    private void init() {
+        database = FirebaseFirestore.getInstance();
+        conversations = new ArrayList<>();
+        recentConversationAdapter = new RecentConversationAdapter(conversations);
+        binding.recentConversationRecycler.setAdapter(recentConversationAdapter);
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        Log.d("Fragment tag", "onStart call in home fragment");
-
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        Log.d("Fragment tag", "onStop call in home fragment");
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.d("Fragment tag", "onResume call in home fragment");
-
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.d("Fragment tag", "onDestroy call in home fragment");
-
-    }
 }
