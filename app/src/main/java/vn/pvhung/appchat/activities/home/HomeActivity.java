@@ -38,27 +38,20 @@ import vn.pvhung.appchat.util.preferenceManager.UserPreferenceManager;
 @AndroidEntryPoint
 
 public class HomeActivity extends AppCompatActivity {
-
     ActivityHomeBinding binding;
     FirebaseUser currentUser;
-
     @Inject
     FirebaseFirestore firestore;
-
     UserPreferenceManager userPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
-
         userPreferences = new UserPreferenceManager(getApplicationContext());
-
         setContentView(binding.getRoot());
-
         setupNavigationBottomAppBar();
         setListeners();
-
         getToken();
     }
 
@@ -67,7 +60,6 @@ public class HomeActivity extends AppCompatActivity {
             startActivity(new Intent(this, UsersActivity.class));
         });
     }
-
 
     private void setupNavigationBottomAppBar() {
 
