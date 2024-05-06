@@ -25,6 +25,7 @@ import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
 import vn.pvhung.appchat.R;
+import vn.pvhung.appchat.activities.chat.ChatActivity;
 import vn.pvhung.appchat.activities.login.LoginActivity;
 import vn.pvhung.appchat.activities.users.UsersActivity;
 import vn.pvhung.appchat.constants.SharedPreferenceName;
@@ -33,11 +34,13 @@ import vn.pvhung.appchat.databinding.ActivityHomeBinding;
 import vn.pvhung.appchat.fragments.friends.FriendFragment;
 import vn.pvhung.appchat.fragments.home.HomeFragment;
 import vn.pvhung.appchat.fragments.setting.SettingFragment;
+import vn.pvhung.appchat.listeners.UserListener;
+import vn.pvhung.appchat.models.User;
 import vn.pvhung.appchat.util.preferenceManager.PreferenceManager;
 import vn.pvhung.appchat.util.preferenceManager.UserPreferenceManager;
 @AndroidEntryPoint
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity implements UserListener {
     ActivityHomeBinding binding;
     FirebaseUser currentUser;
     @Inject
@@ -152,4 +155,11 @@ public class HomeActivity extends AppCompatActivity {
                 .addOnFailureListener(e -> makeToast("Fail to delete token"));
     }
 
+    @Override
+    public void onUserClicked(User user) {
+        Intent it = new Intent(this, ChatActivity.class);
+        it.putExtra(StringConstants.KEY_USER, user);
+        it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(it);
+    }
 }

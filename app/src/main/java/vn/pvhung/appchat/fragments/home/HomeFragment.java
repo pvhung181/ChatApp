@@ -25,6 +25,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import vn.pvhung.appchat.activities.home.HomeActivity;
 import vn.pvhung.appchat.adapters.RecentConversationAdapter;
 import vn.pvhung.appchat.constants.StringConstants;
 import vn.pvhung.appchat.databinding.FragmentHomeBinding;
@@ -33,7 +34,7 @@ import vn.pvhung.appchat.util.preferenceManager.UserPreferenceManager;
 
 public class HomeFragment extends Fragment {
     FragmentHomeBinding binding;
-    Activity homeActivity;
+    HomeActivity homeActivity;
 
     List<ChatMessage> conversations;
     FirebaseFirestore database;
@@ -50,7 +51,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        homeActivity = requireActivity();
+        homeActivity = (HomeActivity) getActivity();
         init();
         listenConversation();
     }
@@ -59,7 +60,7 @@ public class HomeFragment extends Fragment {
     private void init() {
         database = FirebaseFirestore.getInstance();
         conversations = new ArrayList<>();
-        recentConversationAdapter = new RecentConversationAdapter(conversations);
+        recentConversationAdapter = new RecentConversationAdapter(conversations, homeActivity);
         binding.recentConversationRecycler.setAdapter(recentConversationAdapter);
         userPreferenceManager = new UserPreferenceManager(homeActivity.getApplicationContext());
     }
@@ -115,8 +116,7 @@ public class HomeFragment extends Fragment {
             }
         }
 
-        //conversations.sort(Comparator.comparing(ChatMessage::getDateObj));
-
+        conversations.sort(Comparator.comparing(ChatMessage::getDateObj));
         binding.recentConversationRecycler.setVisibility(View.VISIBLE);
         binding.recentConversationRecycler.smoothScrollToPosition(0);
         binding.progressBar.setVisibility(View.GONE);

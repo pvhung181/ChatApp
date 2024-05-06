@@ -58,10 +58,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_16dp"
                     android:text="Chats"
-                    app:drawableTopCompat="@drawable/baseline_chat_24"
-                    />
-
-
+                    app:drawableTopCompat="@drawable/baseline_chat_24"/>
                 <Space
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"

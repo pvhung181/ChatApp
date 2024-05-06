@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="@dimen/_8sdp"
-    android:id="@+id/user_layout">
+    android:id="@+id/conversation_layout">
 
     <com.makeramen.roundedimageview.RoundedImageView
         android:id="@+id/avatar"
