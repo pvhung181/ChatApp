@@ -110,6 +110,11 @@ public class LoginActivity extends AppCompatActivity {
                                     userPreferences.putString(StringConstants.KEY_DISPLAY_NAME, doc.getString(StringConstants.KEY_DISPLAY_NAME));
                                     userPreferences.putString(StringConstants.KEY_DOCUMENT_ID, doc.getId());
                                     userPreferences.putString(StringConstants.KEY_AVATAR, doc.getString(StringConstants.KEY_AVATAR));
+                                    userPreferences.putString(StringConstants.KEY_ADDRESS, doc.getString(StringConstants.KEY_ADDRESS));
+                                    userPreferences.putString(StringConstants.KEY_CITY, doc.getString(StringConstants.KEY_CITY));
+                                    userPreferences.putString(StringConstants.KEY_BIRTH, doc.getString(StringConstants.KEY_BIRTH));
+                                    userPreferences.putString(StringConstants.KEY_EMAIL, doc.getString(StringConstants.KEY_EMAIL));
+
                                     //userPreferences.putBoolean(StringConstants.IS_FIRST_TIME, doc.getBoolean(StringConstants.IS_FIRST_TIME, true));
 
                                     if (!Boolean.TRUE.equals(doc.getBoolean(StringConstants.IS_FIRST_TIME))) {

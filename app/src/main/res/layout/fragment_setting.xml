@@ -6,47 +6,107 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:scrollbars="vertical"
+    android:padding="@dimen/_12sdp"
     android:id="@+id/setting_fragment"
     tools:context=".fragments.setting.SettingFragment">
 
-    <com.makeramen.roundedimageview.RoundedImageView
-        android:id="@+id/avatar"
-        android:layout_width="@dimen/_80sdp"
-        android:layout_height="@dimen/_80sdp"
-        android:background="@drawable/background_image"
-        android:src="@drawable/default_avatar"
-        android:scaleType="centerCrop"
-        app:riv_oval="true"
-        android:layout_gravity="center"/>
-
-
-
-    <TextView
-        android:id="@+id/display_name"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/profile_user"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="This is setting fragment"/>
+        android:background="@drawable/background_bottom_shadow_line"
+        android:gravity="center_vertical"
+        android:padding="@dimen/_2sdp"
+        android:orientation="horizontal">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/phone_number"/>
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/avatar"
+            android:layout_width="@dimen/_48sdp"
+            android:layout_height="@dimen/_48sdp"
+            android:background="@drawable/background_image"
+            android:src="@drawable/default_avatar"
+            android:scaleType="centerCrop"
+            app:riv_oval="true"
+            android:layout_gravity="center"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/email"
-        />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_marginStart="@dimen/_12sdp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/photo_url"/>
+            <TextView
+                android:id="@+id/display_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="@dimen/_24sdp"
+                android:text="Display name"/>
 
-    <Button
+            <TextView
+                android:id="@+id/user_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="italic"
+                android:textSize="@dimen/_12sdp"
+                android:text="\@username"/>
+
+        </LinearLayout>
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="@dimen/_18sdp"
+            android:layout_height="@dimen/_18sdp"
+            android:src="@drawable/ic_forward_arrow"
+            android:layout_marginEnd="@dimen/_12sdp"/>
+
+    </LinearLayout>
+
+
+    <androidx.cardview.widget.CardView
         android:id="@+id/signout_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Sign Out" />
+        app:cardElevation="10dp"
+        app:cardCornerRadius="@dimen/_2sdp"
+        app:cardBackgroundColor="@color/white"
+        app:cardPreventCornerOverlap="true"
+        app:cardUseCompatPadding="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="@dimen/_12sdp"
+            android:orientation="horizontal">
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="@dimen/_24sdp"
+                android:layout_height="@dimen/_24sdp"
+                android:src="@drawable/ic_logout"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_marginStart="@dimen/_12sdp"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/_18sdp"
+                android:text="@string/logout"/>
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="@dimen/_18sdp"
+                android:layout_height="@dimen/_18sdp"
+                android:src="@drawable/ic_forward_arrow"
+                android:layout_marginEnd="@dimen/_12sdp"/>
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
 
 </LinearLayout>

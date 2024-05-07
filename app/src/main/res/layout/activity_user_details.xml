@@ -5,45 +5,59 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".activities.user.UserInforCollectionActivity">
+    tools:context=".activities.user.UserDetails">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/toolbar_layout"
+    <LinearLayout
+        android:id="@+id/topbar_chat"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
+        android:background="@color/md_theme_light_primary"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:layout_marginBottom="@dimen/margin_8dp"
-            android:title="@string/user_infor_collection" />
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_20sdp">
-
-        <com.makeramen.roundedimageview.RoundedImageView
-            android:id="@+id/avatar"
-            android:layout_width="@dimen/_80sdp"
-            android:layout_height="@dimen/_80sdp"
-            android:layout_gravity="center"
-            android:background="@drawable/background_image"
-            android:scaleType="centerCrop"
-            android:src="@drawable/default_avatar"
-            app:riv_oval="true" />
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/back_btn"
+            android:layout_width="@dimen/_24sdp"
+            android:layout_height="@dimen/_24sdp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="@dimen/_8sdp"
+            android:src="@drawable/ic_back"
+            android:tint="@color/md_theme_light_onPrimary" />
 
         <TextView
-            android:id="@+id/add_image_label"
+            android:id="@+id/username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Add image" />
+            android:layout_marginStart="@dimen/_12sdp"
+            android:text="@string/profile"
+            android:textColor="@color/md_theme_light_onPrimary"
+            android:textSize="@dimen/_18ssp"
+            android:textStyle="bold" />
+    </LinearLayout>
 
-    </FrameLayout>
+
+    <com.makeramen.roundedimageview.RoundedImageView
+        android:id="@+id/avatar"
+        android:layout_width="@dimen/_65sdp"
+        android:layout_height="@dimen/_65sdp"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/_4sdp"
+        android:background="@drawable/background_image"
+        android:scaleType="center"
+        app:riv_oval="true" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_1sdp"
+        android:layout_marginStart="@dimen/_12sdp"
+        android:layout_marginTop="@dimen/_12sdp"
+        android:layout_marginEnd="@dimen/_12sdp"
+        android:layout_marginBottom="@dimen/_12sdp"
+        android:background="@color/black"
+        app:layout_constraintTop_toBottomOf="@id/avatar" />
 
 
     <com.google.android.material.textfield.TextInputLayout
@@ -56,7 +70,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/background_edittext"
-
             android:hint="@string/display_name"
             android:singleLine="true" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -72,10 +85,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/background_edittext"
-
             android:focusable="false"
-            android:hint="@string/dd_mm_yyyy"
-            android:singleLine="true" />
+            android:hint="@string/dd_mm_yyyy" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -87,8 +98,10 @@
             android:id="@+id/email_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+
             android:background="@drawable/background_edittext"
-            android:hint="@string/email" />
+            android:hint="@string/email"
+            android:singleLine="true" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -99,8 +112,8 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/city_edit_text"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
 
+            android:layout_height="wrap_content"
             android:background="@drawable/background_edittext"
             android:hint="@string/city"
             android:singleLine="true" />
@@ -115,7 +128,6 @@
             android:id="@+id/address_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
             android:background="@drawable/background_edittext"
             android:hint="@string/address"
             android:singleLine="true" />
@@ -126,11 +138,30 @@
         android:layout_height="0dp"
         android:layout_weight="1" />
 
-    <Button
-        android:id="@+id/confirm_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:layout_margin="@dimen/_12sdp"
-        android:text="@string/confirm" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_42sdp"
+        android:layout_marginStart="@dimen/_12sdp"
+        android:layout_marginEnd="@dimen/_12sdp">
+
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="@dimen/_24sdp"
+            android:layout_height="@dimen/_24sdp"
+            android:layout_gravity="center"
+            android:indeterminate="true"
+            android:visibility="invisible" />
+
+        <Button
+            android:id="@+id/save_btn"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/save" />
+
+
+    </FrameLayout>
+
+
 </LinearLayout>

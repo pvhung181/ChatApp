@@ -34,6 +34,7 @@ import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 import vn.pvhung.appchat.R;
 import vn.pvhung.appchat.activities.home.HomeActivity;
 import vn.pvhung.appchat.activities.login.LoginActivity;
+import vn.pvhung.appchat.activities.user.UserDetails;
 import vn.pvhung.appchat.constants.SharedPreferenceName;
 import vn.pvhung.appchat.constants.StringConstants;
 import vn.pvhung.appchat.databinding.FragmentSettingBinding;
@@ -78,9 +79,8 @@ public class SettingFragment extends Fragment {
 //
 //        }
         if(userPreferences.getString(StringConstants.KEY_AVATAR) != null) {
-            binding.email.setText(userPreferences.getString(StringConstants.KEY_EMAIL));
             binding.displayName.setText(userPreferences.getString(StringConstants.KEY_DISPLAY_NAME));
-            //binding.photoUrl.setText(userPreferences.getString(StringConstants.KEY_AVATAR));
+            binding.userName.setText(String.format("@%s", userPreferences.getString(StringConstants.KEY_USER_NAME)));
             binding.avatar.setImageBitmap(ImageHelper.decodeImage(userPreferences.getString(StringConstants.KEY_AVATAR)));
         }
     }
@@ -88,6 +88,10 @@ public class SettingFragment extends Fragment {
     public void setListeners() {
         binding.signoutBtn.setOnClickListener(v -> {
             ((HomeActivity)requireActivity()).signout();
+        });
+
+        binding.profileUser.setOnClickListener(v -> {
+            startActivity(new Intent(getActivity(), UserDetails.class));
         });
     }
 
