@@ -74,25 +74,15 @@ public class HomeActivity extends BaseActivity implements UserListener {
                 setFragment(new HomeFragment());
 
             setColorForTextViewWithDrawableTop(binding.chat, R.color.md_theme_light_primary);
-            setColorForTextViewWithDrawableTop(binding.people, R.color.black);
             setColorForTextViewWithDrawableTop(binding.setting, R.color.black);
         });
 
-        binding.people.setOnClickListener(v -> {
-            if (!(getVisibleFragment() instanceof FriendFragment))
-                setFragment(new FriendFragment());
-
-            setColorForTextViewWithDrawableTop(binding.people, R.color.md_theme_light_primary);
-            setColorForTextViewWithDrawableTop(binding.chat, R.color.black);
-            setColorForTextViewWithDrawableTop(binding.setting, R.color.black);
-        });
 
         binding.setting.setOnClickListener(v -> {
             if (!(getVisibleFragment() instanceof SettingFragment))
                 setFragment(new SettingFragment());
 
             setColorForTextViewWithDrawableTop(binding.setting, R.color.md_theme_light_primary);
-            setColorForTextViewWithDrawableTop(binding.people, R.color.black);
             setColorForTextViewWithDrawableTop(binding.chat, R.color.black);
         });
     }
