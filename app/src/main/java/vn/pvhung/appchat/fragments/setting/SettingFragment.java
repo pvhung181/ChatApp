@@ -79,10 +79,10 @@ public class SettingFragment extends Fragment {
 //
 //        }
         if(userPreferences.getString(StringConstants.KEY_AVATAR) != null) {
-            binding.displayName.setText(userPreferences.getString(StringConstants.KEY_DISPLAY_NAME));
-            binding.userName.setText(String.format("@%s", userPreferences.getString(StringConstants.KEY_USER_NAME)));
             binding.avatar.setImageBitmap(ImageHelper.decodeImage(userPreferences.getString(StringConstants.KEY_AVATAR)));
         }
+        binding.displayName.setText(userPreferences.getString(StringConstants.KEY_DISPLAY_NAME));
+        binding.userName.setText(String.format("@%s", userPreferences.getString(StringConstants.KEY_USER_NAME)));
     }
 
     public void setListeners() {

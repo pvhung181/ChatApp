@@ -135,6 +135,7 @@ public class UserInforCollectionActivity extends AppCompatActivity {
 
                 cf.whereEqualTo(StringConstants.KEY_USER_NAME, userPreferences.getString(StringConstants.KEY_USER_NAME))
                 .get().addOnSuccessListener(task -> {
+
                     DocumentSnapshot curr = task.getDocuments().get(0);
                     Map<String, Object> vals = new HashMap<>();
                     vals.put(StringConstants.KEY_DISPLAY_NAME, binding.nameEditText.getText().toString());
@@ -144,6 +145,7 @@ public class UserInforCollectionActivity extends AppCompatActivity {
                     vals.put(StringConstants.KEY_ADDRESS, binding.addressEditText.getText().toString());
                     vals.put(StringConstants.IS_FIRST_TIME, false);
                     userPreferences.putBoolean(StringConstants.IS_FIRST_TIME, false);
+                    userPreferences.putString(StringConstants.KEY_DISPLAY_NAME, binding.nameEditText.getText().toString());
                     if(encodedImage != null) vals.put(StringConstants.KEY_AVATAR, encodedImage);
                     else {
                         Bitmap icon = BitmapFactory.decodeResource(this.getResources(), R.drawable.default_avatar);

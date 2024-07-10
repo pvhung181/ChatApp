@@ -4,8 +4,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
@@ -19,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import vn.pvhung.appchat.activities.BaseActivity;
 import vn.pvhung.appchat.adapters.ChatAdapter;
 import vn.pvhung.appchat.constants.StringConstants;
 import vn.pvhung.appchat.databinding.ActivityChatBinding;
@@ -28,7 +27,7 @@ import vn.pvhung.appchat.models.ChatMessage;
 import vn.pvhung.appchat.models.User;
 import vn.pvhung.appchat.util.preferenceManager.UserPreferenceManager;
 
-public class ChatActivity extends AppCompatActivity {
+public class ChatActivity extends BaseActivity {
 
     ActivityChatBinding binding;
     private User userReceiver;

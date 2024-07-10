@@ -1,7 +1,5 @@
 package vn.pvhung.appchat.activities.users;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -11,6 +9,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.List;
 
+import vn.pvhung.appchat.activities.BaseActivity;
 import vn.pvhung.appchat.activities.chat.ChatActivity;
 import vn.pvhung.appchat.adapters.UsersAdapter;
 import vn.pvhung.appchat.constants.StringConstants;
@@ -19,7 +18,7 @@ import vn.pvhung.appchat.listeners.UserListener;
 import vn.pvhung.appchat.models.User;
 import vn.pvhung.appchat.util.preferenceManager.UserPreferenceManager;
 
-public class UsersActivity extends AppCompatActivity implements UserListener {
+public class UsersActivity extends BaseActivity implements UserListener {
 
     ActivityUsersBinding binding;
     UserPreferenceManager userPreferenceManager;

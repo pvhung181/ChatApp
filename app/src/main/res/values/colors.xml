@@ -3,7 +3,9 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="blue">#008DDA</color>
-
+    <color name="light_green">#7ABA78</color>
+    <color name="red">#C40C0C</color>
+<!--    color app-->
     <color name="seed">#41C9E2</color>
     <color name="md_theme_light_primary">#006877</color>
     <color name="md_theme_light_onPrimary">#FFFFFF</color>

@@ -26,18 +26,33 @@
             android:src="@drawable/ic_back"
             android:layout_marginStart="@dimen/_8sdp" />
 
-        <TextView
-            android:id="@+id/username"
+
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:maxLines="1"
-            android:text="@string/username"
-            android:layout_gravity="center"
-            android:textColor="@color/md_theme_light_onPrimary"
-            android:textSize="@dimen/_18ssp"
-            android:textStyle="bold"
+            android:layout_gravity="center_vertical"
             android:layout_marginStart="@dimen/_12sdp"
-            />
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/username"
+                android:textColor="@color/md_theme_light_onPrimary"
+                android:textSize="@dimen/_18ssp"
+                android:textStyle="bold"
+
+                />
+
+            <TextView
+                android:id="@+id/status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/offline"
+                android:textStyle="italic"
+                android:textColor="#7ABA78"/>
+        </LinearLayout>
 
         <View
             android:layout_width="0dp"

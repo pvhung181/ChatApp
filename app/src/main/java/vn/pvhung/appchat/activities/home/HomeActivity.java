@@ -25,6 +25,7 @@ import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
 import vn.pvhung.appchat.R;
+import vn.pvhung.appchat.activities.BaseActivity;
 import vn.pvhung.appchat.activities.chat.ChatActivity;
 import vn.pvhung.appchat.activities.login.LoginActivity;
 import vn.pvhung.appchat.activities.users.UsersActivity;
@@ -40,7 +41,7 @@ import vn.pvhung.appchat.util.preferenceManager.PreferenceManager;
 import vn.pvhung.appchat.util.preferenceManager.UserPreferenceManager;
 @AndroidEntryPoint
 
-public class HomeActivity extends AppCompatActivity implements UserListener {
+public class HomeActivity extends BaseActivity implements UserListener {
     ActivityHomeBinding binding;
     FirebaseUser currentUser;
     @Inject
