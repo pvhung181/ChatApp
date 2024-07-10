@@ -16,6 +16,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import vn.pvhung.appchat.activities.BaseActivity;
 import vn.pvhung.appchat.adapters.ChatAdapter;
@@ -30,12 +31,13 @@ import vn.pvhung.appchat.util.preferenceManager.UserPreferenceManager;
 public class ChatActivity extends BaseActivity {
 
     ActivityChatBinding binding;
-    private User userReceiver;
+    private User receiver;
     ChatAdapter chatAdapter;
     List<ChatMessage> chatMessages;
     UserPreferenceManager userPreferenceManager;
     FirebaseFirestore database;
     String conversationId = null;
+    private boolean isReceiverActive = false;
     private final OnCompleteListener<QuerySnapshot> onCompleteConversationListener = task -> {
         if(task.isSuccessful() && task.getResult() != null && task.getResult().getDocuments().size() > 0) {
             conversationId = task.getResult().getDocuments().get(0).getId();
@@ -88,6 +90,7 @@ public class ChatActivity extends BaseActivity {
         init();
         setListener();
         listenMessage();
+        listenStatusOfReceiver();
     }
 
     private void setListener() {
@@ -99,18 +102,18 @@ public class ChatActivity extends BaseActivity {
     private void listenMessage() {
         database.collection(StringConstants.KEY_COLLECTIONS_CHAT)
                 .whereEqualTo(StringConstants.KEY_SENDER_ID, userPreferenceManager.getString(StringConstants.KEY_DOCUMENT_ID))
-                .whereEqualTo(StringConstants.KEY_RECEIVER_ID, userReceiver.getUserId())
+                .whereEqualTo(StringConstants.KEY_RECEIVER_ID, receiver.getUserId())
                 .addSnapshotListener(eventListener);
 
         database.collection(StringConstants.KEY_COLLECTIONS_CHAT)
                 .whereEqualTo(StringConstants.KEY_RECEIVER_ID, userPreferenceManager.getString(StringConstants.KEY_DOCUMENT_ID))
-                .whereEqualTo(StringConstants.KEY_SENDER_ID, userReceiver.getUserId())
+                .whereEqualTo(StringConstants.KEY_SENDER_ID, receiver.getUserId())
                 .addSnapshotListener(eventListener);
     }
 
     private void loadUserReceiver() {
-        userReceiver = (User) getIntent().getSerializableExtra(StringConstants.KEY_USER);
-        if (userReceiver != null) binding.username.setText(userReceiver.getDisplayName());
+        receiver = (User) getIntent().getSerializableExtra(StringConstants.KEY_USER);
+        if (receiver != null) binding.username.setText(receiver.getDisplayName());
     }
 
     private void init() {
@@ -120,7 +123,7 @@ public class ChatActivity extends BaseActivity {
         chatAdapter = new ChatAdapter(
                 chatMessages,
                 userPreferenceManager.getString(StringConstants.KEY_DOCUMENT_ID),
-                ImageHelper.decodeImage(userReceiver.getImage())
+                ImageHelper.decodeImage(receiver.getImage())
         );
 
         binding.chatRecyclerView.setAdapter(chatAdapter);
@@ -135,7 +138,7 @@ public class ChatActivity extends BaseActivity {
         if (binding.messageInput.getText().toString().trim().isEmpty()) return;
         Map<String, Object> messages = new HashMap<>();
         messages.put(StringConstants.KEY_SENDER_ID, userPreferenceManager.getString(StringConstants.KEY_DOCUMENT_ID));
-        messages.put(StringConstants.KEY_RECEIVER_ID, userReceiver.getUserId());
+        messages.put(StringConstants.KEY_RECEIVER_ID, receiver.getUserId());
         messages.put(StringConstants.KEY_MESSAGE, binding.messageInput.getText().toString());
         messages.put(StringConstants.KEY_TIMESTAMP, new Date());
 
@@ -148,9 +151,9 @@ public class ChatActivity extends BaseActivity {
             cvs.put(StringConstants.KEY_SENDER_NAME, userPreferenceManager.getString(StringConstants.KEY_DISPLAY_NAME));
             cvs.put(StringConstants.KEY_SENDER_IMAGE, userPreferenceManager.getString(StringConstants.KEY_AVATAR));
 
-            cvs.put(StringConstants.KEY_RECEIVER_ID, userReceiver.getUserId());
-            cvs.put(StringConstants.KEY_RECEIVER_NAME, userReceiver.getDisplayName());
-            cvs.put(StringConstants.KEY_RECEIVER_IMAGE, userReceiver.getImage());
+            cvs.put(StringConstants.KEY_RECEIVER_ID, receiver.getUserId());
+            cvs.put(StringConstants.KEY_RECEIVER_NAME, receiver.getDisplayName());
+            cvs.put(StringConstants.KEY_RECEIVER_IMAGE, receiver.getImage());
 
             cvs.put(StringConstants.KEY_LAST_MESSAGE, binding.messageInput.getText().toString());
 
@@ -181,15 +184,30 @@ public class ChatActivity extends BaseActivity {
                 );
     }
 
+    private void listenStatusOfReceiver() {
+        database.collection(StringConstants.KEY_COLLECTIONS_USER)
+                .document(receiver.getUserId())
+                .addSnapshotListener(ChatActivity.this, (value, err) -> {
+                    if(err != null) return;
+                    if(value != null) {
+                        if(value.getLong(StringConstants.KEY_STATUS) != null) {
+                           int status = Objects.requireNonNull(value.getLong(StringConstants.KEY_STATUS)).intValue();
+                           isReceiverActive = status == 1;
+                        }
+                        binding.status.setText(isReceiverActive ?  "online" : "offline");
+                    }
+                });
+    }
+
     private void checkForConversation() {
         if(chatMessages.size() != 0) {
             checkForConversationRemotely(
                     userPreferenceManager.getString(StringConstants.KEY_DOCUMENT_ID),
-                    userReceiver.getUserId()
+                    receiver.getUserId()
             );
 
             checkForConversationRemotely(
-                    userReceiver.getUserId(),
+                    receiver.getUserId(),
                     userPreferenceManager.getString(StringConstants.KEY_DOCUMENT_ID)
             );
         }

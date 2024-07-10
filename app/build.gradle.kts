@@ -60,10 +60,6 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.8.0"))
     implementation("com.google.firebase:firebase-analytics:21.6.1")
 
-    //cometchat
-//    implementation("com.cometchat:chat-sdk-android:4.0.5")
-//    implementation("com.cometchat:chat-uikit-android:4.2.2")
-
     //jbcrypt
     implementation("org.mindrot:jbcrypt:0.4")
 
@@ -78,9 +74,9 @@ dependencies {
     implementation("com.squareup.picasso:picasso:2.71828")
     implementation("jp.wasabeef:picasso-transformations:2.4.0")
 
-    //rxjava
-    implementation("io.reactivex.rxjava3:rxjava:3.1.8")
-
+    //retrofit
+    implementation("com.squareup.retrofit2:retrofit:2.11.0")
+    implementation("com.squareup.retrofit2:converter-scalars:2.11.0")
 
 
     testImplementation("junit:junit:4.13.2")

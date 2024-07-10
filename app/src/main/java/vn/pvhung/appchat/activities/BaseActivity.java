@@ -1,6 +1,7 @@
 package vn.pvhung.appchat.activities;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,17 +22,18 @@ public class BaseActivity extends AppCompatActivity {
         database = FirebaseFirestore.getInstance();
         userPreferenceManager = new UserPreferenceManager(getApplicationContext());
         dr = database.collection(StringConstants.KEY_COLLECTIONS_USER)
-                .document(userPreferenceManager.getString(StringConstants.KEY_DOCUMENT_ID))
-                .getParent().document();
+                .document(userPreferenceManager.getString(StringConstants.KEY_DOCUMENT_ID));
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        dr.update(StringConstants.KEY_STATUS, 1);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
+        dr.update(StringConstants.KEY_STATUS, 0);
     }
 }

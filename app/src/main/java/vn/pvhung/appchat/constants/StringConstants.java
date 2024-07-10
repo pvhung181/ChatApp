@@ -32,5 +32,6 @@ public class StringConstants {
     public static final String KEY_RECEIVER_NAME = "receiver_name";
     public static final String KEY_SENDER_IMAGE = "sender_image";
     public static final String KEY_RECEIVER_IMAGE = "receiver_image";
+    public static final String KEY_STATUS = "status";
     //endregion user
 }
